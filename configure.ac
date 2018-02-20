@@ -1,5 +1,5 @@
-#                                                       -*- Autoconf -*-
-# Process this file with autoconf to produce a configure script.
+dnl#                                                       -*- Autoconf -*-
+dnl# Process this file with autoconf to produce a configure script.
 
 # Copyright (C) 2001-2009 Keisuke Nishida
 # Copyright (C) 2007-2009 Roger While
@@ -19,7 +19,7 @@
 # the Free Software Foundation, 51 Franklin Street, Fifth Floor
 # Boston, MA 02110-1301 USA
 
-AC_PREREQ(2.59)
+AC_PREREQ([2.69])
 
 AC_INIT([OpenCOBOL],[1.1],[open-cobol-list@lists.sourceforge.net],[open-cobol])
 AC_CONFIG_SRCDIR([libcob.h])
@@ -53,7 +53,7 @@ fi
 AM_INIT_AUTOMAKE([gnu no-texinfo.tex])
 AM_MAINTAINER_MODE
 AM_SANITY_CHECK
-AC_ISC_POSIX
+AC_SEARCH_LIBS([strerror],[cposix])
 AM_SET_LEADING_DOT
 AC_EXEEXT
 AM_MAKE_INCLUDE
@@ -69,7 +69,8 @@ AH_TEMPLATE([WITH_CISAM], [Use CISAM as ISAM handler])
 AH_TEMPLATE([WITH_DISAM], [Use DISAM as ISAM handler])
 AH_TEMPLATE([WITH_VBISAM], [Use VBISAM as ISAM handler])
 AH_TEMPLATE([WITH_LFS64], [Compile with large file system 64])
-AH_TEMPLATE([COB_EXPERIMENTAL], [Enable experimemental code (Developers only!)])
+AH_TEMPLATE([COB_EXPERIMENTAL],
+            [Enable experimemental code (Developers only!)])
 AH_TEMPLATE([COB_PARAM_CHECK], [Enable CALL parameter checking])
 AH_TEMPLATE([COB_EXPORT_DYN], [Compile/link option for exporting symbols])
 AH_TEMPLATE([COB_PIC_FLAGS], [Compile/link option for PIC code])
@@ -91,21 +92,26 @@ AH_TEMPLATE([COB_STRFTIME], [Can use strftime for timezone])
 AH_TEMPLATE([COB_LI_IS_LL], [long int is long long])
 AH_TEMPLATE([HAVE_COLOR_SET], [curses has color_set function])
 
-AC_DEFINE(__USE_STRING_INLINES)
+AC_DEFINE([__USE_STRING_INLINES])
 
 LIBCOB_LIBS="-lm"
 LIBCOB_CFLAGS="$lt_prog_compiler_pic"
 
 save_libs="$LIBS"
 
-AC_PROG_CC(gcc xlc cc)
+AC_PROG_CC([gcc xlc cc])
 AM_PROG_CC_C_O
 AC_PROG_CPP
 AC_PROG_CXX
 AC_PROG_YACC
 AC_PROG_EGREP
 AC_PROG_GCC_TRADITIONAL
-AM_PROG_GCJ
+m4_ifdef([AM_PROG_GCJ],[
+  if test "x${CLASSPATH}" != "x"; then
+    test -n "${CLASSPATH}"
+    AM_PROG_GCJ
+  fi
+])dnl
 
 # Configure options.
 
@@ -261,9 +267,8 @@ AC_PROVIDE([AC_PROG_CXX])
 with_tags=
 AC_PROG_LN_S
 AC_PROG_INSTALL
-AC_LIBTOOL_DLOPEN
-AC_LIBTOOL_WIN32_DLL
-AC_PROG_LIBTOOL
+LT_INIT([win32-dll dlopen])
+LT_LANG([C])
 AC_PROG_MAKE_SET
 AC_PROG_LEX
 AC_PROG_RANLIB
@@ -271,10 +276,8 @@ PKG_PROG_PKG_CONFIG
 LTVERSION_VERSION
 
 # Checks for libraries.
-# FIXME: Replace `main' with a function in `-lc':
-AC_CHECK_LIB([c], [main])
-# FIXME: Replace `main' with a function in `-lm':
-AC_CHECK_LIB([m], [main])
+AC_CHECK_LIB([c],[printf])
+AC_CHECK_LIB([m],[sqrt])
 
 # Checks for header files.
 AC_HEADER_STDC
@@ -304,7 +307,8 @@ AC_FUNC_VPRINTF
 AC_CHECK_FUNCS([fcntl getcwd gettimeofday memmove memset mkdir modf nl_langinfo pow putenv rmdir select setlocale sqrt strcasecmp strchr strdup strerror strncasecmp strpbrk strrchr strstr strtol])
 
 # Check for timezone
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <time.h>]], [[timezone = 3600;]])],
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <time.h>]],
+                                   [[timezone = 3600;]])],
 	[AC_DEFINE(HAVE_TIMEZONE, 1)],
 	[])
 
@@ -351,7 +355,7 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <time.h>]],
 
 # Checks for gettext.
 AM_GNU_GETTEXT([external])
-AM_GNU_GETTEXT_VERSION(0.13)
+AM_GNU_GETTEXT_VERSION([0.18.3])
 if test "x$LTLIBINTL" != "x"
 then
   COBC_LIBS="$COBC_LIBS $LTLIBINTL"
@@ -427,8 +431,8 @@ then
 		return 1;
 		#endif]])],
 		[HAS_DB41="yes"],
-		[],
-		[])
+		[HAS_DB41="no"],
+		[HAS_DB41="unknown"])
 	if test "$HAS_DB41" = "yes"
 	then
 		AC_DEFINE(USE_DB41)
@@ -450,8 +454,8 @@ then
 			printf("no\n");
 			return 1;]])],
 			[USE_DB="yes"],
-			[],
-			[])
+			[USE_DB="no"],
+			[USE_DB="no"])
 			if test "$USE_DB" != "no"
 			then
 				LIBCOB_LIBS="$LIBCOB_LIBS -l$MYOCLIBS"
@@ -506,10 +510,10 @@ then
 		fi
 		if test "$USE_DB" != "yes"
 		then
-#			if test "$HAS_DB41" != "no"
-#			then
-#				AC_MSG_ERROR(Include file db.h implies version >=4.1 but no library found)
-#			fi
+			if test "$HAS_DB41" != "no"
+			then
+				AC_MSG_WARN(Include file db.h implies version >=4.1 but no library found)
+			fi
 		AC_CHECK_LIB([db-4], [__db_open],
 		[USE_DB="yes" LIBCOB_LIBS="$LIBCOB_LIBS -ldb-4"],
 		  [AC_CHECK_LIB([db-4], [dbopen],
@@ -535,8 +539,8 @@ AC_RUN_IFELSE([AC_LANG_PROGRAM([[]], [[
    return 1;
   #endif]])],
   [DEFINE_DL="yes"],
-  [],
-  [])
+  [DEFINE_DL="no"],
+  [DEFINE_DL="no"])
 
 if test "$DEFINE_DL" = "no" -a "$COB_TRY_DL" = "yes"
 then
@@ -579,8 +583,8 @@ AC_RUN_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>
 	}
 	return 0;]])],
 	[AC_DEFINE(COB_STRFTIME)],
-	[],
-	[])
+	[:],
+	[:])
 
 # Checks for size of long
 AC_RUN_IFELSE([AC_LANG_PROGRAM([[]], [[
@@ -589,8 +593,8 @@ AC_RUN_IFELSE([AC_LANG_PROGRAM([[]], [[
 	return 1;
 	]])],
 	[AC_DEFINE(COB_LI_IS_LL)],
-	[],
-	[])
+	[:],
+	[:])
 
 # OpenCOBOL Configuration
 

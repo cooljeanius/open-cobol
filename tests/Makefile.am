@@ -6,11 +6,11 @@
 
 SUBDIRS = cobol85
 
-TESTS = $(srcdir)/syntax \
-	$(srcdir)/run \
-	$(srcdir)/run-O \
-	$(srcdir)/data-rep \
-	$(srcdir)/data-rep-O
+TESTS = syntax \
+	run \
+	run-O \
+	data-rep \
+	data-rep-O
 
 syntax_DEPENDENCIES = \
 	syntax.at \
