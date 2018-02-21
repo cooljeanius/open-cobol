@@ -2781,7 +2781,7 @@ test -n "$target_alias" &&
 # export/setenv CFLAGS=-maix64
 # export/setenv LDFLAGS=-maix64
 
-if echo $CFLAGS | grep 'aix64' 1>/dev/null 2>&1
+if echo ${CFLAGS} | grep 'aix64' 1>/dev/null 2>&1
 then
 	if test -f /usr/ccs/bin/ar
 	then
@@ -4689,42 +4689,13 @@ fi
 
 
 
-# Autoheader templates
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 $as_echo "#define __USE_STRING_INLINES 1" >>confdefs.h
 
 LIBCOB_LIBS="-lm"
-LIBCOB_CFLAGS="$lt_prog_compiler_pic"
+LIBCOB_CFLAGS="${lt_prog_compiler_pic}"
 
-save_libs="$LIBS"
+save_libs="${LIBS}"
 
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -21750,7 +21721,7 @@ _ACEOF
     ;;
 esac
 
-if test "$ac_cv_c_inline" != no
+if test "x${ac_cv_c_inline}" != "xno"
 then
 	$as_echo "#define COB_HAS_INLINE 1" >>confdefs.h
 
@@ -23699,7 +23670,7 @@ else
 $as_echo "$as_me: WARNING: GMP 3 or later is required" >&2;}
 fi
 
-LIBCOB_LIBS="$LIBCOB_LIBS -lgmp"
+LIBCOB_LIBS="${LIBCOB_LIBS} -lgmp"
 
 # Solaris has nanosleep in other libraries
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -23708,7 +23679,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 int
 main ()
 {
-nanosleep (NULL, NULL);
+nanosleep(NULL, NULL);
   ;
   return 0;
 }
@@ -23761,9 +23732,9 @@ _ACEOF
 
 fi
 
-   if test "x$ac_cv_lib_rt_nanosleep" = "xyes"
+   if test "x${ac_cv_lib_rt_nanosleep}" = "xyes"
    then
-     LIBCOB_LIBS="$LIBCOB_LIBS -lrt"
+     LIBCOB_LIBS="${LIBCOB_LIBS} -lrt"
    else
      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for nanosleep in -lposix4" >&5
 $as_echo_n "checking for nanosleep in -lposix4... " >&6; }
@@ -23810,9 +23781,9 @@ _ACEOF
 
 fi
 
-     if test "x$ac_cv_lib_posix4_nanosleep" = "xyes"
+     if test "x${ac_cv_lib_posix4_nanosleep}" = "xyes"
      then
-       LIBCOB_LIBS="$LIBCOB_LIBS -lposix4"
+       LIBCOB_LIBS="${LIBCOB_LIBS} -lposix4"
      fi
    fi
 fi
@@ -25185,10 +25156,10 @@ $as_echo "#define HAVE_DCGETTEXT 1" >>confdefs.h
 
 
 
-if test "x$LTLIBINTL" != "x"
+if test "x${LTLIBINTL}" != "x"
 then
-  COBC_LIBS="$COBC_LIBS $LTLIBINTL"
-  LIBCOB_LIBS="$LIBCOB_LIBS $LTLIBINTL"
+  COBC_LIBS="${COBC_LIBS} ${LTLIBINTL}"
+  LIBCOB_LIBS="${LIBCOB_LIBS} ${LTLIBINTL}"
 fi
 
 # Checks for ncurses/pdcurses/curses.
@@ -25238,9 +25209,9 @@ _ACEOF
 
 fi
 
-if test "x$ac_cv_lib_ncurses_initscr" = "xyes"
+if test "x${ac_cv_lib_ncurses_initscr}" = "xyes"
 then
-  LIBCOB_LIBS="$LIBCOB_LIBS -lncurses"
+  LIBCOB_LIBS="${LIBCOB_LIBS} -lncurses"
   for ac_header in ncurses.h
 do :
   ac_fn_c_check_header_mongrel "$LINENO" "ncurses.h" "ac_cv_header_ncurses_h" "$ac_includes_default"
@@ -25312,9 +25283,9 @@ _ACEOF
 
 fi
 
-  if test "x$ac_cv_lib_pdcurses_initscr" = "xyes"
+  if test "x${ac_cv_lib_pdcurses_initscr}" = "xyes"
   then
-    LIBCOB_LIBS="$LIBCOB_LIBS -lpdcurses"
+    LIBCOB_LIBS="${LIBCOB_LIBS} -lpdcurses"
     for ac_header in pdcurses.h
 do :
   ac_fn_c_check_header_mongrel "$LINENO" "pdcurses.h" "ac_cv_header_pdcurses_h" "$ac_includes_default"
@@ -25373,9 +25344,9 @@ _ACEOF
 
 fi
 
-    if test "x$ac_cv_lib_curses_initscr" = "xyes"
+    if test "x${ac_cv_lib_curses_initscr}" = "xyes"
     then
-      LIBCOB_LIBS="$LIBCOB_LIBS -lcurses"
+      LIBCOB_LIBS="${LIBCOB_LIBS} -lcurses"
       for ac_header in curses.h
 do :
   ac_fn_c_check_header_mongrel "$LINENO" "curses.h" "ac_cv_header_curses_h" "$ac_includes_default"
@@ -25392,25 +25363,25 @@ done
   fi
 fi
 
-if test "$USE_NCURSES" != "no"
+if test "${USE_NCURSES}" != "no"
 then
   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
   #ifdef HAVE_NCURSES_H
   #include <ncurses.h>
-  #elif defined (HAVE_NCURSES_NCURSES_H)
+  #elif defined(HAVE_NCURSES_NCURSES_H)
   #include <ncurses/ncurses.h>
-  #elif defined (HAVE_PDCURSES_H)
+  #elif defined(HAVE_PDCURSES_H)
   #include <pdcurses.h>
-  #elif defined (HAVE_CURSES_H)
+  #elif defined(HAVE_CURSES_H)
   #include <curses.h>
   #endif
 int
 main ()
 {
 
-  color_set (0, NULL);
+  color_set(0, NULL);
   ;
   return 0;
 }
@@ -25556,7 +25527,7 @@ _ACEOF
 USE_DB="no"
 HAS_DB41="no"
 
-if test "$LIBDB" = "1"
+if test "${LIBDB}" = "1"
 then
        for ac_header in db1/db.h
 do :
@@ -25610,12 +25581,12 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_db1_dbopen" >&5
 $as_echo "$ac_cv_lib_db1_dbopen" >&6; }
 if test "x$ac_cv_lib_db1_dbopen" = xyes; then :
-  USE_DB="yes" LIBCOB_LIBS="$LIBCOB_LIBS -ldb1"
+  USE_DB="yes" LIBCOB_LIBS="${LIBCOB_LIBS} -ldb1"
 else
   as_fn_error $? "libdb1 is required" "$LINENO" 5
 fi
 
-elif test "$LIBDB" = "3"
+elif test "${LIBDB}" = "3"
 then
 	if test "$cross_compiling" = yes; then :
   HAS_DB41="unknown"
@@ -27254,12 +27225,12 @@ case $host_os in
 	;;
 esac
 
-if test "`basename $CC`" = "gcc"
+if test "`basename ${CC}`" = "gcc"
 then
-	CFLAGS="$CFLAGS -fsigned-char -Wall -Wwrite-strings -Wmissing-prototypes -Wno-format-y2k"
+	CFLAGS="${CFLAGS} -fsigned-char -Wall -Wwrite-strings -Wmissing-prototypes -Wno-format-y2k"
 fi
 
-if test "x$lt_cv_dlopen_self" != "xyes"
+if test "x${lt_cv_dlopen_self}" != "xyes"
 then
 	$as_echo "#define COB_NO_SELFOPEN 1" >>confdefs.h
 
@@ -27268,29 +27239,25 @@ fi
 # Generate the output
 
 cat >>confdefs.h <<_ACEOF
-#define COB_EXPORT_DYN "$COB_EXPORT_DYN"
+#define COB_EXPORT_DYN "${COB_EXPORT_DYN}"
 _ACEOF
-
 cat >>confdefs.h <<_ACEOF
-#define COB_PIC_FLAGS "$COB_PIC_FLAGS"
+#define COB_PIC_FLAGS "${COB_PIC_FLAGS}"
 _ACEOF
-
 cat >>confdefs.h <<_ACEOF
-#define COB_SHARED_OPT "$COB_SHARED_OPT"
+#define COB_SHARED_OPT "${COB_SHARED_OPT}"
 _ACEOF
-
 cat >>confdefs.h <<_ACEOF
-#define COB_EXEEXT "$COB_EXEEXT"
+#define COB_EXEEXT "${COB_EXEEXT}"
 _ACEOF
-
 cat >>confdefs.h <<_ACEOF
-#define COB_EXTRA_FLAGS "$COB_EXTRA_FLAGS"
+#define COB_EXTRA_FLAGS "${COB_EXTRA_FLAGS}"
 _ACEOF
-
-if test "x$striplib" != "x"
+  ## strip:
+if test "x${striplib}" != "x"
 then
   cat >>confdefs.h <<_ACEOF
-#define COB_STRIP_CMD "$striplib"
+#define COB_STRIP_CMD "${striplib}"
 _ACEOF
 
 

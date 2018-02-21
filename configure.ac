@@ -19,7 +19,7 @@ dnl# Process this file with autoconf to produce a configure script.
 # the Free Software Foundation, 51 Franklin Street, Fifth Floor
 # Boston, MA 02110-1301 USA
 
-AC_PREREQ([2.69])
+AC_PREREQ([2.69])dnl
 
 AC_INIT([OpenCOBOL],[1.1],[open-cobol-list@lists.sourceforge.net],[open-cobol])
 AC_CONFIG_SRCDIR([libcob.h])
@@ -38,7 +38,7 @@ AC_CANONICAL_TARGET dnl# calls "_HOST" version of it
 # export/setenv CFLAGS=-maix64
 # export/setenv LDFLAGS=-maix64
 
-if echo $CFLAGS | grep 'aix64' 1>/dev/null 2>&1
+if echo ${CFLAGS} | grep 'aix64' 1>/dev/null 2>&1
 then
 	if test -f /usr/ccs/bin/ar
 	then
@@ -49,7 +49,7 @@ then
 	NM="/usr/ccs/bin/nm -X64 -B"
 fi
 
-AM_INIT_AUTOMAKE([gnu no-texinfo.tex])
+AM_INIT_AUTOMAKE([gnits no-texinfo.tex])
 AM_MAINTAINER_MODE
 AM_SANITY_CHECK
 AC_SEARCH_LIBS([strerror],[cposix])
@@ -59,44 +59,44 @@ AM_MAKE_INCLUDE
 # AX_* macros require the autoconf-archive package
 AX_CHECK_GNU_MAKE
 
-# Autoheader templates
-AH_TEMPLATE([WITH_DB], [Compile with the Berkeley DB library])
-AH_TEMPLATE([USE_DB41], [Use Berkeley DB library new features])
-AH_TEMPLATE([WITH_INDEX_EXTFH], [Compile with an external ISAM handler])
-AH_TEMPLATE([WITH_SEQRA_EXTFH], [Compile with an external SEQ/RAN handler])
-AH_TEMPLATE([WITH_CISAM], [Use CISAM as ISAM handler])
-AH_TEMPLATE([WITH_DISAM], [Use DISAM as ISAM handler])
-AH_TEMPLATE([WITH_VBISAM], [Use VBISAM as ISAM handler])
-AH_TEMPLATE([WITH_LFS64], [Compile with large file system 64])
+dnl# Autoheader templates:
+AH_TEMPLATE([WITH_DB],[Compile with the Berkeley DB library])dnl
+AH_TEMPLATE([USE_DB41],[Use Berkeley DB library new features])dnl
+AH_TEMPLATE([WITH_INDEX_EXTFH],[Compile with an external ISAM handler])dnl
+AH_TEMPLATE([WITH_SEQRA_EXTFH],[Compile with an external SEQ/RAN handler])dnl
+AH_TEMPLATE([WITH_CISAM],[Use CISAM as ISAM handler])dnl
+AH_TEMPLATE([WITH_DISAM],[Use DISAM as ISAM handler])dnl
+AH_TEMPLATE([WITH_VBISAM],[Use VBISAM as ISAM handler])dnl
+AH_TEMPLATE([WITH_LFS64],[Compile with large file system 64])dnl
 AH_TEMPLATE([COB_EXPERIMENTAL],
-            [Enable experimemental code (Developers only!)])
-AH_TEMPLATE([COB_PARAM_CHECK], [Enable CALL parameter checking])
-AH_TEMPLATE([COB_EXPORT_DYN], [Compile/link option for exporting symbols])
-AH_TEMPLATE([COB_PIC_FLAGS], [Compile/link option for PIC code])
-AH_TEMPLATE([COB_SHARED_OPT], [Compile/link option for shared code])
-AH_TEMPLATE([COB_STRIP_CMD], [Strip command])
-AH_TEMPLATE([USE_LIBDL], [Use system dynamic loader])
-AH_TEMPLATE([PATCH_LEVEL], [Define a patch level])
-AH_TEMPLATE([WITH_VARSEQ], [Define variable sequential file format])
-AH_TEMPLATE([DLLHIDDEN], [Has visibility attribute])
-AH_TEMPLATE([HAVE_PSIGN_OPT], [Has -Wno-pointer-sign])
-AH_TEMPLATE([HAVE_ATTRIBUTE_ALIGNED], [Has __attribute__((aligned))])
-AH_TEMPLATE([HAVE_TIMEZONE], [Has timezone variable])
-AH_TEMPLATE([COB_EXEEXT], [Executable extension])
-AH_TEMPLATE([COB_EXTRA_FLAGS], [Extra Compiler Flags])
-AH_TEMPLATE([__USE_STRING_INLINES], [Compiler optimization])
-AH_TEMPLATE([COB_HAS_INLINE], [Can use inline keyword])
-AH_TEMPLATE([COB_NO_SELFOPEN], [Can not dlopen self])
-AH_TEMPLATE([COB_STRFTIME], [Can use strftime for timezone])
-AH_TEMPLATE([COB_LI_IS_LL], [long int is long long])
-AH_TEMPLATE([HAVE_COLOR_SET], [curses has color_set function])dnl
+            [Enable experimemental code (Developers only!)])dnl
+AH_TEMPLATE([COB_PARAM_CHECK],[Enable CALL parameter checking])dnl
+AH_TEMPLATE([COB_EXPORT_DYN],[Compile/link option for exporting symbols])dnl
+AH_TEMPLATE([COB_PIC_FLAGS],[Compile/link option for PIC code])dnl
+AH_TEMPLATE([COB_SHARED_OPT],[Compile/link option for shared code])dnl
+AH_TEMPLATE([COB_STRIP_CMD],[Strip command])dnl
+AH_TEMPLATE([USE_LIBDL],[Use system dynamic loader])dnl
+AH_TEMPLATE([PATCH_LEVEL],[Define a patch level])dnl
+AH_TEMPLATE([WITH_VARSEQ],[Define variable sequential file format])dnl
+AH_TEMPLATE([DLLHIDDEN],[Has visibility attribute])dnl
+AH_TEMPLATE([HAVE_PSIGN_OPT],[Has -Wno-pointer-sign])dnl
+AH_TEMPLATE([HAVE_ATTRIBUTE_ALIGNED],[Has __attribute__((aligned))])dnl
+AH_TEMPLATE([HAVE_TIMEZONE],[Has timezone variable])dnl
+AH_TEMPLATE([COB_EXEEXT],[Executable extension])dnl
+AH_TEMPLATE([COB_EXTRA_FLAGS],[Extra Compiler Flags])dnl
+AH_TEMPLATE([__USE_STRING_INLINES],[Compiler optimization])dnl
+AH_TEMPLATE([COB_HAS_INLINE],[Can use inline keyword])dnl
+AH_TEMPLATE([COB_NO_SELFOPEN],[Can not dlopen self])dnl
+AH_TEMPLATE([COB_STRFTIME],[Can use strftime for timezone])dnl
+AH_TEMPLATE([COB_LI_IS_LL],[long int is long long])dnl
+AH_TEMPLATE([HAVE_COLOR_SET],[curses has color_set function])dnl
 
 AC_DEFINE([__USE_STRING_INLINES])dnl
 
 LIBCOB_LIBS="-lm"
-LIBCOB_CFLAGS="$lt_prog_compiler_pic"
+LIBCOB_CFLAGS="${lt_prog_compiler_pic}"
 
-save_libs="$LIBS"
+save_libs="${LIBS}"
 
 AC_PROG_CC([gcc xlc cc])
 AM_PROG_CC_C_O
@@ -307,9 +307,9 @@ AC_STRUCT_TM
 # AX_* macros require the autoconf-archive package
 AX_C___ATTRIBUTE__
 AC_C_INLINE
-if test "$ac_cv_c_inline" != no 
+if test "x${ac_cv_c_inline}" != "xno" 
 then
-	AC_DEFINE(COB_HAS_INLINE, 1)
+	AC_DEFINE([COB_HAS_INLINE],[1])
 fi
 
 
@@ -323,7 +323,7 @@ AC_CHECK_FUNCS([fcntl getcwd gettimeofday memmove memset mkdir modf nl_langinfo 
 # Check for timezone
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <time.h>]],
                                    [[timezone = 3600;]])],
-	[AC_DEFINE(HAVE_TIMEZONE, 1)],
+	[AC_DEFINE([HAVE_TIMEZONE],[1])],
 	[])dnl
 
 # Checks for internationalization stuff
@@ -335,10 +335,10 @@ AM_LANGINFO_CODESET
 # FreeBSD has gnugetopt library - needs checking
 
 AC_CHECK_FUNC([getopt_long_only],
-  [AC_CHECK_HEADERS([kpathsea/getopt.h getopt.h], [], [])],
-  [AC_LIBOBJ(getopt)
-   AC_LIBOBJ(getopt1)
-   AC_LIBSOURCE(getopt.h)])dnl
+  [AC_CHECK_HEADERS([kpathsea/getopt.h getopt.h],[],[])],
+  [AC_LIBOBJ([getopt])
+   AC_LIBOBJ([getopt1])
+   AC_LIBSOURCE([getopt.h])])dnl
 
 # Checks for ppl (which depends on gmp)
 AM_PATH_PPL
@@ -350,71 +350,71 @@ AC_CHECK_LIB([gmp],[main])
 AC_CHECK_LIB([gmpxx],[main])
 AC_CHECK_LIB([gmp],[__gmp_randinit],[],
              [AC_MSG_WARN([GMP 3 or later is required])])
-LIBCOB_LIBS="$LIBCOB_LIBS -lgmp"
+LIBCOB_LIBS="${LIBCOB_LIBS} -lgmp"
 
 # Solaris has nanosleep in other libraries
 AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <time.h>]],
-  [[nanosleep (NULL, NULL);]])],
+  [[nanosleep(NULL, NULL);]])],
   [],
-  [AC_CHECK_LIB([rt], [nanosleep])
-   if test "x$ac_cv_lib_rt_nanosleep" = "xyes"
+  [AC_CHECK_LIB([rt],[nanosleep])
+   if test "x${ac_cv_lib_rt_nanosleep}" = "xyes"
    then
-     LIBCOB_LIBS="$LIBCOB_LIBS -lrt"
+     LIBCOB_LIBS="${LIBCOB_LIBS} -lrt"
    else
-     AC_CHECK_LIB([posix4], [nanosleep])
-     if test "x$ac_cv_lib_posix4_nanosleep" = "xyes"
+     AC_CHECK_LIB([posix4],[nanosleep])
+     if test "x${ac_cv_lib_posix4_nanosleep}" = "xyes"
      then
-       LIBCOB_LIBS="$LIBCOB_LIBS -lposix4"
+       LIBCOB_LIBS="${LIBCOB_LIBS} -lposix4"
      fi
    fi])dnl
 
 # Checks for gettext.
 AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION([0.18.3])
-if test "x$LTLIBINTL" != "x"
+if test "x${LTLIBINTL}" != "x"
 then
-  COBC_LIBS="$COBC_LIBS $LTLIBINTL"
-  LIBCOB_LIBS="$LIBCOB_LIBS $LTLIBINTL"
+  COBC_LIBS="${COBC_LIBS} ${LTLIBINTL}"
+  LIBCOB_LIBS="${LIBCOB_LIBS} ${LTLIBINTL}"
 fi
 
 # Checks for ncurses/pdcurses/curses.
 USE_NCURSES="no"
-AC_CHECK_LIB([ncurses], [initscr])
-if test "x$ac_cv_lib_ncurses_initscr" = "xyes"
+AC_CHECK_LIB([ncurses],[initscr])
+if test "x${ac_cv_lib_ncurses_initscr}" = "xyes"
 then
-  LIBCOB_LIBS="$LIBCOB_LIBS -lncurses"
+  LIBCOB_LIBS="${LIBCOB_LIBS} -lncurses"
   AC_CHECK_HEADERS([ncurses.h],[USE_NCURSES="yes"],
     [AC_CHECK_HEADERS([ncurses/ncurses.h],[USE_NCURSES="ncurses"],[],[])],[])
 else
-  AC_CHECK_LIB([pdcurses], [initscr])
-  if test "x$ac_cv_lib_pdcurses_initscr" = "xyes"
+  AC_CHECK_LIB([pdcurses],[initscr])
+  if test "x${ac_cv_lib_pdcurses_initscr}" = "xyes"
   then
-    LIBCOB_LIBS="$LIBCOB_LIBS -lpdcurses"
-    AC_CHECK_HEADERS([pdcurses.h], [USE_NCURSES="pdcurses"], [], [])
+    LIBCOB_LIBS="${LIBCOB_LIBS} -lpdcurses"
+    AC_CHECK_HEADERS([pdcurses.h],[USE_NCURSES="pdcurses"],[],[])
   else
-    AC_CHECK_LIB([curses], [initscr])
-    if test "x$ac_cv_lib_curses_initscr" = "xyes"
+    AC_CHECK_LIB([curses],[initscr])
+    if test "x${ac_cv_lib_curses_initscr}" = "xyes"
     then
-      LIBCOB_LIBS="$LIBCOB_LIBS -lcurses"
-      AC_CHECK_HEADERS([curses.h], [USE_NCURSES="curses"], [], [])
+      LIBCOB_LIBS="${LIBCOB_LIBS} -lcurses"
+      AC_CHECK_HEADERS([curses.h],[USE_NCURSES="curses"],[],[])
     fi
   fi
 fi
 
-if test "$USE_NCURSES" != "no"
+if test "${USE_NCURSES}" != "no"
 then
   AC_LINK_IFELSE([AC_LANG_PROGRAM([[
   #ifdef HAVE_NCURSES_H
   #include <ncurses.h>
-  #elif defined (HAVE_NCURSES_NCURSES_H)
+  #elif defined(HAVE_NCURSES_NCURSES_H)
   #include <ncurses/ncurses.h>
-  #elif defined (HAVE_PDCURSES_H)
+  #elif defined(HAVE_PDCURSES_H)
   #include <pdcurses.h>
-  #elif defined (HAVE_CURSES_H)
+  #elif defined(HAVE_CURSES_H)
   #include <curses.h>
-  #endif]], [[
-  color_set (0, NULL);]])],
-  [AC_DEFINE(HAVE_COLOR_SET)],
+  #endif]],[[
+  color_set(0, NULL);]])],
+  [AC_DEFINE([HAVE_COLOR_SET])],
   [],
   [])
 fi
@@ -425,19 +425,19 @@ AX_BERKELEY_DB
 USE_DB="no"
 HAS_DB41="no"
 AC_SUBST([LIBDB])
-if test "$LIBDB" = "1"
+if test "${LIBDB}" = "1"
 then
        AC_CHECK_HEADERS([db1/db.h],
          [AC_DEFINE(HAVE_DB1_DB_H)],
          [AC_MSG_ERROR([db1/db.h is required])])
-       AC_CHECK_LIB([db1], [dbopen],
-         [USE_DB="yes" LIBCOB_LIBS="$LIBCOB_LIBS -ldb1"],
-         [AC_MSG_ERROR(libdb1 is required)])
-elif test "$LIBDB" = "3"
+       AC_CHECK_LIB([db1],[dbopen],
+         [USE_DB="yes" LIBCOB_LIBS="${LIBCOB_LIBS} -ldb1"],
+         [AC_MSG_ERROR([libdb1 is required])])
+elif test "${LIBDB}" = "3"
 then
 	AC_RUN_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>
 		#include <stdlib.h>
-		#include <db.h>]], [[
+		#include <db.h>]],[[
 		printf("checking for BDB db.h version >= 4.1 ... ");
 		#if (DB_VERSION_MAJOR > 4) || ((DB_VERSION_MAJOR == 4) && (DB_VERSION_MINOR > 0))
 		printf("yes (%d.%d)\n", DB_VERSION_MAJOR, DB_VERSION_MINOR);
@@ -586,7 +586,7 @@ then
 fi
 
 # Checks for dl/ltdl.
-AC_RUN_IFELSE([AC_LANG_PROGRAM([[]], [[
+AC_RUN_IFELSE([AC_LANG_PROGRAM([[]],[[
   #ifdef _WIN32
    return 0;
   #else
@@ -600,30 +600,30 @@ if test "$DEFINE_DL" = "no" -a "$COB_TRY_DL" = "yes"
 then
   if test "x$ac_cv_header_dlfcn_h" = "xyes"
   then
-    AC_CHECK_LIB([c], [dlopen], [DEFINE_DL="yes"], [])
+    AC_CHECK_LIB([c],[dlopen],[DEFINE_DL="yes"],[])
     if test "$DEFINE_DL" = "no"
     then
-      AC_CHECK_LIB([dl], [dlopen], [DEFINE_DL="yes"], [])
+      AC_CHECK_LIB([dl],[dlopen],[DEFINE_DL="yes"],[])
       if test "$DEFINE_DL" = "yes"
       then
-	AC_DEFINE(USE_LIBDL)
+	AC_DEFINE([USE_LIBDL])
 	LIBCOB_LIBS="$LIBCOB_LIBS -ldl"
       fi
     else
-	AC_DEFINE(USE_LIBDL)
+	AC_DEFINE([USE_LIBDL])
     fi
   fi
 fi
 if test "$DEFINE_DL" = "no"
 then
-  AC_CHECK_HEADERS([ltdl.h], , AC_MSG_ERROR(ltdl.h is required))
-  AC_CHECK_LIB([ltdl], [lt_dlopen], , AC_MSG_ERROR(libltdl is required))
+  AC_CHECK_HEADERS([ltdl.h],[],[AC_MSG_ERROR([ltdl.h is required])])
+  AC_CHECK_LIB([ltdl],[lt_dlopen],[],[AC_MSG_ERROR([libltdl is required])])
   LIBCOB_LIBS="$LIBCOB_LIBS -lltdl"
 fi
 
 # Checks for workable strftime
 AC_RUN_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>
-	#include <time.h>]], [[
+	#include <time.h>]],[[
 	time_t	ticks;
 	int	ret;
 	char	buff[16];
@@ -636,17 +636,17 @@ AC_RUN_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>
 		return 1;
 	}
 	return 0;]])],
-	[AC_DEFINE(COB_STRFTIME)],
+	[AC_DEFINE([COB_STRFTIME])],
 	[:],
 	[:])dnl
 
 # Checks for size of long
-AC_RUN_IFELSE([AC_LANG_PROGRAM([[]], [[
+AC_RUN_IFELSE([AC_LANG_PROGRAM([[]],[[
 	if (sizeof(long int) == sizeof(long long))
 		return 0;
 	return 1;
 	]])],
-	[AC_DEFINE(COB_LI_IS_LL)],
+	[AC_DEFINE([COB_LI_IS_LL])],
 	[:],
 	[:])dnl
 
@@ -726,15 +726,15 @@ fi
 # Check gcc 4 option
 MYOLDCFLAGS="$CFLAGS"
 CFLAGS="$CFLAGS -Wno-pointer-sign"
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[int testint;]])],
-	[AC_DEFINE(HAVE_PSIGN_OPT, 1)],
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]],[[int testint;]])],
+	[AC_DEFINE([HAVE_PSIGN_OPT],[1])],
 	[])
 CFLAGS="$MYOLDCFLAGS"
 
 # Check if aligned attribute works
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]],
 	[[char testchar[4] __attribute__((aligned));]])],
-	[AC_DEFINE(HAVE_ATTRIBUTE_ALIGNED, 1)],
+	[AC_DEFINE([HAVE_ATTRIBUTE_ALIGNED],[1])],
 	[])dnl
 
 # Special stuff
@@ -767,7 +767,7 @@ case $host_os in
 	if test "`basename $CC`" != "gcc"
 	then
 		COB_SHARED_OPT="-b"
-		AC_DEFINE([_XOPEN_SOURCE_EXTENDED],1)
+		AC_DEFINE([_XOPEN_SOURCE_EXTENDED],[1])
 		rm -f hptest*
 		echo 'int main() { return 0; }' > hptest.c
 		${CC} ${CFLAGS} +Olit=all -o hptest hptest.c > hptest.out 2>&1
@@ -803,27 +803,28 @@ case $host_os in
 	;;
 esac
 
-if test "`basename $CC`" = "gcc"
+if test "`basename ${CC}`" = "gcc"
 then
-	CFLAGS="$CFLAGS -fsigned-char -Wall -Wwrite-strings -Wmissing-prototypes -Wno-format-y2k"
+	CFLAGS="${CFLAGS} -fsigned-char -Wall -Wwrite-strings -Wmissing-prototypes -Wno-format-y2k"
 fi
 
-if test "x$lt_cv_dlopen_self" != "xyes"
+if test "x${lt_cv_dlopen_self}" != "xyes"
 then
-	AC_DEFINE(COB_NO_SELFOPEN,1)
+	AC_DEFINE([COB_NO_SELFOPEN],[1])
 fi
 
 # Generate the output
 
-AC_DEFINE_UNQUOTED(COB_EXPORT_DYN, "$COB_EXPORT_DYN")
-AC_DEFINE_UNQUOTED(COB_PIC_FLAGS, "$COB_PIC_FLAGS")
-AC_DEFINE_UNQUOTED(COB_SHARED_OPT, "$COB_SHARED_OPT")
-AC_DEFINE_UNQUOTED(COB_EXEEXT, "$COB_EXEEXT")
-AC_DEFINE_UNQUOTED(COB_EXTRA_FLAGS, "$COB_EXTRA_FLAGS")
-if test "x$striplib" != "x"
+AC_DEFINE_UNQUOTED([COB_EXPORT_DYN],["${COB_EXPORT_DYN}"])dnl
+AC_DEFINE_UNQUOTED([COB_PIC_FLAGS],["${COB_PIC_FLAGS}"])dnl
+AC_DEFINE_UNQUOTED([COB_SHARED_OPT],["${COB_SHARED_OPT}"])dnl
+AC_DEFINE_UNQUOTED([COB_EXEEXT],["${COB_EXEEXT}"])dnl
+AC_DEFINE_UNQUOTED([COB_EXTRA_FLAGS],["${COB_EXTRA_FLAGS}"])dnl
+  ## strip:
+if test "x${striplib}" != "x"
 then
-  AC_DEFINE_UNQUOTED(COB_STRIP_CMD, "$striplib")
-  AC_SUBST(COB_STRIP_CMD)
+  AC_DEFINE_UNQUOTED([COB_STRIP_CMD],["${striplib}"])
+  AC_SUBST([COB_STRIP_CMD])
 fi
 AC_SUBST([COB_CC])dnl
 AC_SUBST([COB_CFLAGS])dnl

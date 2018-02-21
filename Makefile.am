@@ -10,7 +10,7 @@ include_HEADERS = libcob.h
 
 SUBDIRS = lib libcob cobc bin config copy po texi tests
 
-ACLOCAL_AMFLAGS = -I m4
+ACLOCAL_AMFLAGS = -I m4 --install
 BUILT_SOURCES = defaults.h
 DISTCLEANFILES = $(BUILT_SOURCES) cpucheck *~ m4/*~ po/*~
 EXTRA_DIST = cpucheck.c COPYING.DOC

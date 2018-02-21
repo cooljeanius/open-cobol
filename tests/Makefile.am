@@ -12,6 +12,8 @@ TESTS = syntax \
 	data-rep \
 	data-rep-O
 
+check_SCRIPTS = syntax run run-O data-rep data-rep-O
+
 syntax_DEPENDENCIES = \
 	syntax.at \
 	syntax.src/copy.at \
