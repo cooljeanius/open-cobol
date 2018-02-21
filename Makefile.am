@@ -12,8 +12,11 @@ SUBDIRS = lib libcob cobc bin config copy po texi tests
 
 ACLOCAL_AMFLAGS = -I m4
 BUILT_SOURCES = defaults.h
-DISTCLEANFILES = $(BUILT_SOURCES) cpucheck
+DISTCLEANFILES = $(BUILT_SOURCES) cpucheck *~ m4/*~ po/*~
 EXTRA_DIST = cpucheck.c COPYING.DOC
+
+distclean-local:
+	rm -rf autom4te.cache || rmdir autom4te.cache
 
 dist-hook:
 	echo "static char octardate[] = \"`date +'%b %d %Y %T %Z'`\";" > $(distdir)/tarstamp.h

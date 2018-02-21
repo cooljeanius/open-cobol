@@ -4,3 +4,16 @@
 *.log
 libtool
 *~
+Makefile
+*.deps/*.*o
+*/*.deps/*.*o
+*.libs/*
+*/*.libs/*
+cob-config
+config.h
+*.status
+defaults.h
+*.lo
+stamp-h*
+*.la
+open-cobol-1.1/*

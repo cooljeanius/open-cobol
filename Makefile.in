@@ -201,8 +201,8 @@ DIST_SUBDIRS = $(SUBDIRS)
 am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/cob-config.in \
 	$(srcdir)/config.h.in ABOUT-NLS AUTHORS COPYING COPYING.DOC \
 	COPYING.LIB ChangeLog INSTALL NEWS README THANKS TODO compile \
-	config.guess config.rpath config.sub install-sh ltmain.sh \
-	missing mkinstalldirs
+	config.guess config.rpath config.sub depcomp install-sh \
+	ltmain.sh missing mkinstalldirs
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -295,9 +295,6 @@ ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 FGREP = @FGREP@
-GCJ = @GCJ@
-GCJDEPMODE = @GCJDEPMODE@
-GCJFLAGS = @GCJFLAGS@
 GETTEXT_MACRO_VERSION = @GETTEXT_MACRO_VERSION@
 GMSGFMT = @GMSGFMT@
 GMSGFMT_015 = @GMSGFMT_015@
@@ -316,6 +313,7 @@ LEXLIB = @LEXLIB@
 LEX_OUTPUT_ROOT = @LEX_OUTPUT_ROOT@
 LIBCOB_CFLAGS = @LIBCOB_CFLAGS@
 LIBCOB_LIBS = @LIBCOB_LIBS@
+LIBDB = @LIBDB@
 LIBICONV = @LIBICONV@
 LIBINTL = @LIBINTL@
 LIBOBJS = @LIBOBJS@
@@ -375,7 +373,6 @@ ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
 ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
-ac_ct_GCJ = @ac_ct_GCJ@
 am__include = @am__include@
 am__leading_dot = @am__leading_dot@
 am__quote = @am__quote@
@@ -432,7 +429,7 @@ include_HEADERS = libcob.h
 SUBDIRS = lib libcob cobc bin config copy po texi tests
 ACLOCAL_AMFLAGS = -I m4
 BUILT_SOURCES = defaults.h
-DISTCLEANFILES = $(BUILT_SOURCES) cpucheck
+DISTCLEANFILES = $(BUILT_SOURCES) cpucheck *~ m4/*~ po/*~
 EXTRA_DIST = cpucheck.c COPYING.DOC
 all: $(BUILT_SOURCES) config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
@@ -901,7 +898,7 @@ distclean: distclean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -f Makefile
 distclean-am: clean-am distclean-generic distclean-hdr \
-	distclean-libtool distclean-tags
+	distclean-libtool distclean-local distclean-tags
 
 dvi: dvi-recursive
 
@@ -972,20 +969,24 @@ uninstall-am: uninstall-binSCRIPTS uninstall-includeHEADERS
 	dist-all dist-bzip2 dist-gzip dist-hook dist-lzip dist-shar \
 	dist-tarZ dist-xz dist-zip distcheck distclean \
 	distclean-generic distclean-hdr distclean-libtool \
-	distclean-tags distcleancheck distdir distuninstallcheck dvi \
-	dvi-am html html-am info info-am install install-am \
-	install-binSCRIPTS install-data install-data-am install-dvi \
-	install-dvi-am install-exec install-exec-am install-html \
-	install-html-am install-includeHEADERS install-info \
-	install-info-am install-man install-pdf install-pdf-am \
-	install-ps install-ps-am install-strip installcheck \
-	installcheck-am installdirs installdirs-am maintainer-clean \
+	distclean-local distclean-tags distcleancheck distdir \
+	distuninstallcheck dvi dvi-am html html-am info info-am \
+	install install-am install-binSCRIPTS install-data \
+	install-data-am install-dvi install-dvi-am install-exec \
+	install-exec-am install-html install-html-am \
+	install-includeHEADERS install-info install-info-am \
+	install-man install-pdf install-pdf-am install-ps \
+	install-ps-am install-strip installcheck installcheck-am \
+	installdirs installdirs-am maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-generic \
 	mostlyclean-libtool pdf pdf-am ps ps-am tags tags-am uninstall \
 	uninstall-am uninstall-binSCRIPTS uninstall-includeHEADERS
 
 .PRECIOUS: Makefile
 
+
+distclean-local:
+	rm -rf autom4te.cache || rmdir autom4te.cache
 
 dist-hook:
 	echo "static char octardate[] = \"`date +'%b %d %Y %T %Z'`\";" > $(distdir)/tarstamp.h
