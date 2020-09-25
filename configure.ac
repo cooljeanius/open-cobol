@@ -19,7 +19,7 @@ dnl# Process this file with autoconf to produce a configure script.
 # the Free Software Foundation, 51 Franklin Street, Fifth Floor
 # Boston, MA 02110-1301 USA
 
-AC_PREREQ([2.69])dnl
+AC_PREREQ([2.69.185-b502e])dnl
 
 AC_INIT([OpenCOBOL],[1.1],[open-cobol-list@lists.sourceforge.net],[open-cobol])
 AC_CONFIG_SRCDIR([libcob.h])
@@ -112,95 +112,95 @@ COB_CC=""
 AC_ARG_WITH([cc],
   [AS_HELP_STRING([--with-cc=<cc>],
                   [(OpenCOBOL) specify the C compiler used by cobc])],
-  [ COB_CC=$withval ], [ COB_CC=$CC])dnl
+  [COB_CC=${withval}],[COB_CC=${CC}])dnl
 
 AC_ARG_WITH([seqra-extfh],
   [AS_HELP_STRING([--with-seqra-extfh],
                   [(OpenCOBOL) Use external SEQ/RAN file handler])],
-  [ if test "$with_seqra_extfh" = "yes"
-    then
-	AC_DEFINE(WITH_SEQRA_EXTFH)
-    fi ], [])dnl
+  [if test "x${with_seqra_extfh}" = "xyes"
+   then
+	AC_DEFINE([WITH_SEQRA_EXTFH])
+   fi],[])dnl
 
 AC_ARG_WITH([cisam],
   [AS_HELP_STRING([--with-cisam],[(OpenCOBOL) Use CISAM for ISAM I/O])],
-  [ if test "$with_cisam" = "yes"
-    then
+  [if test "x${with_cisam}" = "xyes"
+   then
 	AC_CHECK_HEADERS([isam.h],[],
                          [AC_MSG_ERROR([isam.h is required for CISAM])])
 	AC_CHECK_LIB([ifisam],[isopen],[],
                      [AC_MSG_ERROR([libifisam is required for CISAM])],
                      [ifisamx])
-	AC_DEFINE(WITH_CISAM)
-	LIBCOB_LIBS="$LIBCOB_LIBS -lifisam -lifisamx"
-    fi ], [])dnl
+	AC_DEFINE([WITH_CISAM])
+	LIBCOB_LIBS="${LIBCOB_LIBS} -lifisam -lifisamx"
+   fi],[])dnl
 
-if test "$with_cisam" != "yes"
+if test "x${with_cisam}" != "xyes"
 then
  AC_ARG_WITH([disam],
   [AS_HELP_STRING([--with-disam],[(OpenCOBOL) Use DISAM for ISAM I/O])],
-  [ if test "$with_disam" = "yes"
-    then
+  [if test "x${with_disam}" = "xyes"
+   then
 	AC_CHECK_HEADERS([disam.h],[],
                          [AC_MSG_ERROR([disam.h is required for DISAM])])
 	AC_CHECK_LIB([disam],[isopen],[],
                      [AC_MSG_ERROR([libdisam is required for DISAM])])
-	AC_DEFINE(WITH_DISAM)
-	LIBCOB_LIBS="$LIBCOB_LIBS -ldisam"
-    fi ], [])
+	AC_DEFINE([WITH_DISAM])
+	LIBCOB_LIBS="${LIBCOB_LIBS} -ldisam"
+   fi],[])
 fi
 
-if test "$with_cisam" != "yes" -a "$with_disam" != "yes"
+if test "x${with_cisam}" != "yes" -a "x${with_disam}" != "yes"
 then
 AC_ARG_WITH([vbisam],
   [AS_HELP_STRING([--with-vbisam],[(OpenCOBOL) Use VBISAM for ISAM I/O])],
-  [ if test "$with_vbisam" = "yes"
-    then
+  [if test "x${with_vbisam}" = "xyes"
+   then
 	AC_CHECK_HEADERS([vbisam.h],[],
                          [AC_MSG_ERROR([vbisam.h is required for VBISAM])])
 	AC_CHECK_LIB([vbisam],[isopen],[],
                      [AC_MSG_ERROR([libvbisam is required for VBISAM])])
-	AC_DEFINE(WITH_VBISAM)
-	LIBCOB_LIBS="$LIBCOB_LIBS -lvbisam"
-    fi ], [])
+	AC_DEFINE([WITH_VBISAM])
+	LIBCOB_LIBS="${LIBCOB_LIBS} -lvbisam"
+   fi],[])
 fi
 
 LIBDB=""
 
-if test "$with_cisam" != "yes" -a "$with_disam" != "yes" -a "$with_vbisam" != "yes"
+if test "x${with_cisam}" != "xyes" -a "x${with_disam}" != "xyes" -a "x${with_vbisam}" != "xyes"
 then
  AC_ARG_WITH([index-extfh],
   [AS_HELP_STRING([--with-index-extfh],
                   [(OpenCOBOL) Use external ISAM file handler])],
-  [ if test "$with_index_extfh" = "yes"
-    then
-	AC_DEFINE(WITH_INDEX_EXTFH)
-    fi ],
-  [ AC_ARG_WITH([db1],
+  [if test "x${with_index_extfh}" = "xyes"
+   then
+	AC_DEFINE([WITH_INDEX_EXTFH])
+   fi],
+  [AC_ARG_WITH([db1],
    [AS_HELP_STRING([--with-db1],
                    [(OpenCOBOL) use Berkeley DB 1.85 (libdb-1.85)])],
-   [ LIBDB="1"
-     AC_DEFINE(WITH_DB, 1) ],
-	[ AC_ARG_WITH([db],
+   [LIBDB="1"
+    AC_DEFINE([WITH_DB],[1])],
+	[AC_ARG_WITH([db],
 		[AS_HELP_STRING([--with-db],
                                 [(OpenCOBOL) use Berkeley DB 3.0 or later (libdb)(default)])],
-		[ if test "$with_db" = "yes"
-		  then
-		  LIBDB="3"
-		  AC_DEFINE(WITH_DB, 3)
-		  fi ],
-		[ LIBDB="3"
-		  AC_DEFINE(WITH_DB, 3) ]) ]) ])
+		[if test "x${with_db}" = "xyes"
+		 then
+		 LIBDB="3"
+		 AC_DEFINE([WITH_DB],[3])
+		 fi],
+		[LIBDB="3"
+		 AC_DEFINE([WITH_DB],[3])])])])
 fi
 
 AC_ARG_WITH([lfs64],
   [AS_HELP_STRING([--with-lfs64],
                   [(OpenCOBOL) use large file system for file I/O (default)])],
-  [ if test "$with_lfs64" = "yes"
-    then
-	AC_DEFINE(WITH_LFS64)
-    fi ],
-  [ AC_DEFINE(WITH_LFS64) ])dnl
+  [if test "x${with_lfs64}" = "xyes"
+   then
+	AC_DEFINE([WITH_LFS64])
+   fi],
+  [AC_DEFINE([WITH_LFS64])])dnl
 
 DEFINE_DL="no"
 COB_TRY_DL="yes"
@@ -208,7 +208,7 @@ COB_TRY_DL="yes"
 AC_ARG_WITH([dl],
   [AS_HELP_STRING([--with-dl],
                   [(OpenCOBOL) use system dynamic loader (default)])],
-  [case $with_dl in  
+  [case ${with_dl} in  
     yes)	COB_TRY_DL="yes"
 		;;
     no)		COB_TRY_DL="no"
@@ -221,7 +221,7 @@ GEN_DEBUG_OPT="no"
 AC_ARG_ENABLE([debug],
   [AS_HELP_STRING([--enable-debug],
                   [(OpenCOBOL) enable -g C compiler debug option])],
-  [if test "$enable_debug" = "yes"
+  [if test "x${enable_debug}" = "xyes"
    then
 	GEN_DEBUG_OPT="yes"
    fi])dnl
@@ -229,29 +229,29 @@ AC_ARG_ENABLE([debug],
 AC_ARG_ENABLE([experimental],
   [AS_HELP_STRING([--enable-experimental],
                   [(OpenCOBOL) enable experimental code (Developers only!)])],
-  [if test "$enable_experimental" = "yes"
+  [if test "x${enable_experimental}" = "xyes"
    then
-	AC_DEFINE(COB_EXPERIMENTAL)
+	AC_DEFINE([COB_EXPERIMENTAL])
    fi])dnl
 
 AC_ARG_ENABLE([param-check],
   [AS_HELP_STRING([--enable-param-check],
                   [(OpenCOBOL) enable CALL parameter checking])],
-  [if test "$enable_param_check" = "yes"
+  [if test "x${enable_param_check}" = "xyes"
    then
-	AC_DEFINE(COB_PARAM_CHECK)
+	AC_DEFINE([COB_PARAM_CHECK])
    fi])dnl
 
 PATCH_LEVEL=0
 AC_ARG_WITH([patch-level],
   [AS_HELP_STRING([--with-patch-level],
                   [(OpenCOBOL) define a patch level (default 0)])],
-[case $with_patch_level in  
+[case ${with_patch_level} in  
     yes)	AC_MSG_ERROR(["You must give --with-patch-level an argument."])
 		;;
     no)		AC_MSG_ERROR(["--without-patch-level not supported."])
 		;;
-    [[0-9]]*)	PATCH_LEVEL=$with_patch_level
+    [[0-9]]*)	PATCH_LEVEL=${with_patch_level}
 		;;
     *)		AC_MSG_ERROR(["You must use a numeric patch level"])
 		;;
@@ -262,12 +262,12 @@ WITH_VARSEQ=0
 AC_ARG_WITH([varseq],
 [AS_HELP_STRING([--with-varseq],
                 [(OpenCOBOL) define variable sequential format (default 0)])],
-[case $with_varseq in  
+[case ${with_varseq} in  
     yes)	AC_MSG_ERROR(["You must give --with-varseq an argument."])
 		;;
     no)		AC_MSG_ERROR(["--without-varseq not supported."])
 		;;
-    [[0-3]])	WITH_VARSEQ=$with_varseq
+    [[0-3]])	WITH_VARSEQ=${with_varseq}
 		;;
     *)		AC_MSG_ERROR(["Invalid --with-varseq argument"])
 		;;
@@ -276,9 +276,9 @@ AC_DEFINE_UNQUOTED([WITH_VARSEQ],[${WITH_VARSEQ}])dnl
 
 # Checks for programs.
 # Stop the stupid tests for C++ and Fortran
-AC_PROVIDE([AC_PROG_F77])
-AC_PROVIDE([AC_PROG_CXX])
-with_tags=""
+AC_PROVIDE([AC_PROG_F77])dnl
+AC_PROVIDE([AC_PROG_CXX])dnl
+  with_tags=""
 AC_PROG_LN_S
 AC_PROG_INSTALL
 LT_INIT([win32-dll dlopen])
@@ -294,8 +294,13 @@ AC_CHECK_LIB([c],[printf])
 AC_CHECK_LIB([m],[sqrt])dnl
 
 # Checks for header files.
-AC_HEADER_STDC
-AC_CHECK_HEADERS([dlfcn.h fcntl.h langinfo.h libintl.h locale.h malloc.h signal.h stddef.h stdlib.h stdint.h string.h strings.h sys/time.h sys/timeb.h sys/types.h unistd.h wchar.h])dnl
+# Autoupdate added the following line to ensure that your configure
+# script's behavior did not change.  It is probably safe to remove.
+AC_CHECK_INCLUDES_DEFAULT
+AC_CHECK_HEADERS([dlfcn.h fcntl.h langinfo.h libintl.h locale.h \
+                  malloc.h malloc/malloc.h signal.h stddef.h stdlib.h \
+                  stdint.h string.h strings.h sys/time.h sys/timeb.h \
+                  sys/types.h unistd.h wchar.h])dnl
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
@@ -318,7 +323,10 @@ AC_FUNC_ALLOCA
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
 AC_FUNC_VPRINTF
-AC_CHECK_FUNCS([fcntl getcwd gettimeofday memmove memset mkdir modf nl_langinfo pow putenv rmdir select setlocale sqrt strcasecmp strchr strdup strerror strncasecmp strpbrk strrchr strstr strtol])dnl
+AC_CHECK_FUNCS([fcntl getcwd gettimeofday memmove memset mkdir modf \
+                nl_langinfo pow putenv rmdir select setlocale sqrt \
+                strcasecmp strchr strdup strerror strncasecmp strpbrk \
+                strrchr strstr strtol])dnl
 
 # Check for timezone
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <time.h>]],
@@ -449,20 +457,20 @@ then
 		[HAS_DB41="yes"],
 		[HAS_DB41="no"],
 		[HAS_DB41="unknown"])
-	if test "$HAS_DB41" = "yes"
+	if test "${HAS_DB41}" = "yes"
 	then
-		AC_DEFINE(USE_DB41)
-		MYOLDLIBS="$LIBS"
+		AC_DEFINE([USE_DB41])
+		MYOLDLIBS="${LIBS}"
 		export MYOCLIBS
 		for MYOCLIBS in db db-4.5 db-4.4 db-4.3 db-4.2 db-4.1
 		do
-			LIBS="$MYOLDLIBS -l$MYOCLIBS"
+			LIBS="${MYOLDLIBS} -l${MYOCLIBS}"
 			AC_RUN_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>
 			#include <stdlib.h>
-			#include <db.h>]], [[
+			#include <db.h>]],[[
 			int major, minor, patch;
 			printf("checking for BDB 4.1 compatibility in %s ... ", getenv("MYOCLIBS"));
-			db_version (&major, &minor, &patch);
+			db_version(&major, &minor, &patch);
 			if (major == DB_VERSION_MAJOR && minor == DB_VERSION_MINOR) {
 				printf("yes\n");
 				return 0;
@@ -472,115 +480,118 @@ then
 			[USE_DB="yes"],
 			[USE_DB="no"],
 			[USE_DB="no"])
-			if test "$USE_DB" != "no"
+			if test "${USE_DB}" != "no"
 			then
-				LIBCOB_LIBS="$LIBCOB_LIBS -l$MYOCLIBS"
+				LIBCOB_LIBS="${LIBCOB_LIBS} -l${MYOCLIBS}"
 				break
 			fi
 		done
-		LIBS="$MYOLDLIBS"
-		if test "$USE_DB" != "yes"
+		LIBS="${MYOLDLIBS}"
+		if test "${USE_DB}" != "yes"
 		then
-			AC_MSG_ERROR(Include file db.h implies version >=4.1 but no library found)
+			AC_MSG_ERROR([Include file db.h implies version >=4.1 but no library found])
 		fi
 	else
-		AC_CHECK_HEADERS([db.h db_185.h db3/db_185.h db4/db_185.h db4.1/db_185.h db4.2/db_185.h db4.3/db_185.h db44/db.h db44/db_cxx.h db4.4/db_185.h db4.5/db_185.h db4.5/db_185.h db46/db.h db46/db_cxx.h db4.6/db_185.h])
-		if test "$USE_DB" != "yes"
+		AC_CHECK_HEADERS([db.h db_185.h db3/db_185.h db4/db_185.h \
+                    db4.1/db_185.h db4.2/db_185.h db4.3/db_185.h db44/db.h \
+                    db44/db_cxx.h db4.4/db_185.h db4.5/db_185.h \
+                    db4.5/db_185.h db46/db.h db46/db_cxx.h db4.6/db_185.h])
+		if test "${USE_DB}" != "yes"
 		then
-		AC_CHECK_LIB([db-6.0], [__db_open],
-		[USE_DB="yes" LIBCOB_LIBS="$LIBCOB_LIBS -ldb-6.0"],
-		  [AC_CHECK_LIB([db-6.0], [dbopen],
-		    [USE_DB="yes" LIBCOB_LIBS="$LIBCOB_LIBS -ldb-6.0"], [])])
+		AC_CHECK_LIB([db-6.0],[__db_open],
+		[USE_DB="yes" LIBCOB_LIBS="${LIBCOB_LIBS} -ldb-6.0"],
+		  [AC_CHECK_LIB([db-6.0],[dbopen],
+		    [USE_DB="yes" LIBCOB_LIBS="${LIBCOB_LIBS} -ldb-6.0"],[])])
+		fi
+		if test "${USE_DB}" != "yes"
+		then
+		AC_CHECK_LIB([db-5.3],[__db_open],
+		[USE_DB="yes" LIBCOB_LIBS="${LIBCOB_LIBS} -ldb-5.3"],
+		  [AC_CHECK_LIB([db-5.3],[dbopen],
+		    [USE_DB="yes" LIBCOB_LIBS="${LIBCOB_LIBS} -ldb-5.3"],[])])
+		fi
+		if test "${USE_DB}" != "yes"
+		then
+		AC_CHECK_LIB([db-5.1],[__db_open],
+		[USE_DB="yes" LIBCOB_LIBS="${LIBCOB_LIBS} -ldb-5.1"],
+		  [AC_CHECK_LIB([db-5.1],[dbopen],
+		    [USE_DB="yes" LIBCOB_LIBS="${LIBCOB_LIBS} -ldb-5.1"],[])])
 		fi
 		if test "$USE_DB" != "yes"
 		then
-		AC_CHECK_LIB([db-5.3], [__db_open],
-		[USE_DB="yes" LIBCOB_LIBS="$LIBCOB_LIBS -ldb-5.3"],
-		  [AC_CHECK_LIB([db-5.3], [dbopen],
-		    [USE_DB="yes" LIBCOB_LIBS="$LIBCOB_LIBS -ldb-5.3"], [])])
+		AC_CHECK_LIB([db-4.8],[__db_open],
+		[USE_DB="yes" LIBCOB_LIBS="${LIBCOB_LIBS} -ldb-4.8"],
+		  [AC_CHECK_LIB([db-4.8],[dbopen],
+		    [USE_DB="yes" LIBCOB_LIBS="${LIBCOB_LIBS} -ldb-4.8"],[])])
 		fi
-		if test "$USE_DB" != "yes"
+		if test "${USE_DB}" != "yes"
 		then
-		AC_CHECK_LIB([db-5.1], [__db_open],
-		[USE_DB="yes" LIBCOB_LIBS="$LIBCOB_LIBS -ldb-5.1"],
-		  [AC_CHECK_LIB([db-5.1], [dbopen],
-		    [USE_DB="yes" LIBCOB_LIBS="$LIBCOB_LIBS -ldb-5.1"], [])])
+		AC_CHECK_LIB([db-4.7],[__db_open],
+		[USE_DB="yes" LIBCOB_LIBS="${LIBCOB_LIBS} -ldb-4.7"],
+		  [AC_CHECK_LIB([db-4.7],[dbopen],
+		    [USE_DB="yes" LIBCOB_LIBS="${LIBCOB_LIBS} -ldb-4.7"],[])])
 		fi
-		if test "$USE_DB" != "yes"
+		if test "${USE_DB}" != "yes"
 		then
-		AC_CHECK_LIB([db-4.8], [__db_open],
-		[USE_DB="yes" LIBCOB_LIBS="$LIBCOB_LIBS -ldb-4.8"],
-		  [AC_CHECK_LIB([db-4.8], [dbopen],
-		    [USE_DB="yes" LIBCOB_LIBS="$LIBCOB_LIBS -ldb-4.8"], [])])
+		AC_CHECK_LIB([db-4.6],[__db_open],
+		[USE_DB="yes" LIBCOB_LIBS="${LIBCOB_LIBS} -ldb-4.6"],
+		  [AC_CHECK_LIB([db-4.6],[dbopen],
+		    [USE_DB="yes" LIBCOB_LIBS="${LIBCOB_LIBS} -ldb-4.6"],[])])
 		fi
-		if test "$USE_DB" != "yes"
+		if test "${USE_DB}" != "yes"
 		then
-		AC_CHECK_LIB([db-4.7], [__db_open],
-		[USE_DB="yes" LIBCOB_LIBS="$LIBCOB_LIBS -ldb-4.7"],
-		  [AC_CHECK_LIB([db-4.7], [dbopen],
-		    [USE_DB="yes" LIBCOB_LIBS="$LIBCOB_LIBS -ldb-4.7"], [])])
+		AC_CHECK_LIB([db-4.5],[__db_open],
+		[USE_DB="yes" LIBCOB_LIBS="${LIBCOB_LIBS} -ldb-4.5"],
+		  [AC_CHECK_LIB([db-4.5],[dbopen],
+		    [USE_DB="yes" LIBCOB_LIBS="${LIBCOB_LIBS} -ldb-4.5"],[])])
 		fi
-		if test "$USE_DB" != "yes"
+		if test "${USE_DB}" != "yes"
 		then
-		AC_CHECK_LIB([db-4.6], [__db_open],
-		[USE_DB="yes" LIBCOB_LIBS="$LIBCOB_LIBS -ldb-4.6"],
-		  [AC_CHECK_LIB([db-4.6], [dbopen],
-		    [USE_DB="yes" LIBCOB_LIBS="$LIBCOB_LIBS -ldb-4.6"], [])])
+		AC_CHECK_LIB([db-4.4],[__db_open],
+		[USE_DB="yes" LIBCOB_LIBS="${LIBCOB_LIBS} -ldb-4.4"],
+		  [AC_CHECK_LIB([db-4.4],[dbopen],
+		    [USE_DB="yes" LIBCOB_LIBS="${LIBCOB_LIBS} -ldb-4.4"],[])])
 		fi
-		if test "$USE_DB" != "yes"
+		if test "${USE_DB}" != "yes"
 		then
-		AC_CHECK_LIB([db-4.5], [__db_open],
-		[USE_DB="yes" LIBCOB_LIBS="$LIBCOB_LIBS -ldb-4.5"],
-		  [AC_CHECK_LIB([db-4.5], [dbopen],
-		    [USE_DB="yes" LIBCOB_LIBS="$LIBCOB_LIBS -ldb-4.5"], [])])
+		AC_CHECK_LIB([db-4.3],[__db_open],
+		[USE_DB="yes" LIBCOB_LIBS="${LIBCOB_LIBS} -ldb-4.3"],
+		  [AC_CHECK_LIB([db-4.3],[dbopen],
+		    [USE_DB="yes" LIBCOB_LIBS="${LIBCOB_LIBS} -ldb-4.3"],[])])
 		fi
-		if test "$USE_DB" != "yes"
+		if test "${USE_DB}" != "yes"
 		then
-		AC_CHECK_LIB([db-4.4], [__db_open],
-		[USE_DB="yes" LIBCOB_LIBS="$LIBCOB_LIBS -ldb-4.4"],
-		  [AC_CHECK_LIB([db-4.4], [dbopen],
-		    [USE_DB="yes" LIBCOB_LIBS="$LIBCOB_LIBS -ldb-4.4"], [])])
+		AC_CHECK_LIB([db-4.2],[__db_open],
+		[USE_DB="yes" LIBCOB_LIBS="${LIBCOB_LIBS} -ldb-4.2"],
+		  [AC_CHECK_LIB([db-4.2],[dbopen],
+		    [USE_DB="yes" LIBCOB_LIBS="${LIBCOB_LIBS} -ldb-4.2"],[])])
 		fi
-		if test "$USE_DB" != "yes"
+		if test "${USE_DB}" != "yes"
 		then
-		AC_CHECK_LIB([db-4.3], [__db_open],
-		[USE_DB="yes" LIBCOB_LIBS="$LIBCOB_LIBS -ldb-4.3"],
-		  [AC_CHECK_LIB([db-4.3], [dbopen],
-		    [USE_DB="yes" LIBCOB_LIBS="$LIBCOB_LIBS -ldb-4.3"], [])])
+		AC_CHECK_LIB([db-4.1],[__db_open],
+		[USE_DB="yes" LIBCOB_LIBS="${LIBCOB_LIBS} -ldb-4.1"],
+		  [AC_CHECK_LIB([db-4.1],[dbopen],
+		    [USE_DB="yes" LIBCOB_LIBS="${LIBCOB_LIBS} -ldb-4.1"],[])])
 		fi
-		if test "$USE_DB" != "yes"
+		if test "${USE_DB}" != "yes"
 		then
-		AC_CHECK_LIB([db-4.2], [__db_open],
-		[USE_DB="yes" LIBCOB_LIBS="$LIBCOB_LIBS -ldb-4.2"],
-		  [AC_CHECK_LIB([db-4.2], [dbopen],
-		    [USE_DB="yes" LIBCOB_LIBS="$LIBCOB_LIBS -ldb-4.2"], [])])
-		fi
-		if test "$USE_DB" != "yes"
-		then
-		AC_CHECK_LIB([db-4.1], [__db_open],
-		[USE_DB="yes" LIBCOB_LIBS="$LIBCOB_LIBS -ldb-4.1"],
-		  [AC_CHECK_LIB([db-4.1], [dbopen],
-		    [USE_DB="yes" LIBCOB_LIBS="$LIBCOB_LIBS -ldb-4.1"], [])])
-		fi
-		if test "$USE_DB" != "yes"
-		then
-			if test "$HAS_DB41" != "no"
+			if test "${HAS_DB41}" != "no"
 			then
-				AC_MSG_WARN(Include file db.h implies version >=4.1 but no library found)
+				AC_MSG_WARN([Include file db.h implies version >=4.1 but no library found])
 			fi
-		AC_CHECK_LIB([db-4], [__db_open],
-		[USE_DB="yes" LIBCOB_LIBS="$LIBCOB_LIBS -ldb-4"],
-		  [AC_CHECK_LIB([db-4], [dbopen],
-		    [USE_DB="yes" LIBCOB_LIBS="$LIBCOB_LIBS -ldb-4"], [])])
+		AC_CHECK_LIB([db-4],[__db_open],
+		[USE_DB="yes" LIBCOB_LIBS="${LIBCOB_LIBS} -ldb-4"],
+		  [AC_CHECK_LIB([db-4],[dbopen],
+		    [USE_DB="yes" LIBCOB_LIBS="${LIBCOB_LIBS} -ldb-4"],[])])
 		fi
 		
-		if test "$USE_DB" != "yes"
+		if test "${USE_DB}" != "yes"
 		then
-		AC_CHECK_LIB([db], [__db_open],
-		[USE_DB="yes" LIBCOB_LIBS="$LIBCOB_LIBS -ldb"],
-		  [AC_CHECK_LIB([db], [dbopen],
-		    [USE_DB="yes" LIBCOB_LIBS="$LIBCOB_LIBS -ldb"],
-			[AC_MSG_ERROR(libdb is required)])])
+		AC_CHECK_LIB([db],[__db_open],
+		[USE_DB="yes" LIBCOB_LIBS="${LIBCOB_LIBS} -ldb"],
+		  [AC_CHECK_LIB([db],[dbopen],
+		    [USE_DB="yes" LIBCOB_LIBS="${LIBCOB_LIBS} -ldb"],
+			[AC_MSG_ERROR([libdb is required])])])
 		fi
 	fi
 fi
@@ -596,29 +607,29 @@ AC_RUN_IFELSE([AC_LANG_PROGRAM([[]],[[
   [DEFINE_DL="no"],
   [DEFINE_DL="no"])dnl
 
-if test "$DEFINE_DL" = "no" -a "$COB_TRY_DL" = "yes"
+if test "${DEFINE_DL}" = "no" -a "${COB_TRY_DL}" = "yes"
 then
-  if test "x$ac_cv_header_dlfcn_h" = "xyes"
+  if test "x${ac_cv_header_dlfcn_h}" = "xyes"
   then
     AC_CHECK_LIB([c],[dlopen],[DEFINE_DL="yes"],[])
-    if test "$DEFINE_DL" = "no"
+    if test "${DEFINE_DL}" = "no"
     then
       AC_CHECK_LIB([dl],[dlopen],[DEFINE_DL="yes"],[])
-      if test "$DEFINE_DL" = "yes"
+      if test "${DEFINE_DL}" = "yes"
       then
 	AC_DEFINE([USE_LIBDL])
-	LIBCOB_LIBS="$LIBCOB_LIBS -ldl"
+	LIBCOB_LIBS="${LIBCOB_LIBS} -ldl"
       fi
     else
 	AC_DEFINE([USE_LIBDL])
     fi
   fi
 fi
-if test "$DEFINE_DL" = "no"
+if test "${DEFINE_DL}" = "no"
 then
   AC_CHECK_HEADERS([ltdl.h],[],[AC_MSG_ERROR([ltdl.h is required])])
   AC_CHECK_LIB([ltdl],[lt_dlopen],[],[AC_MSG_ERROR([libltdl is required])])
-  LIBCOB_LIBS="$LIBCOB_LIBS -lltdl"
+  LIBCOB_LIBS="${LIBCOB_LIBS} -lltdl"
 fi
 
 # Checks for workable strftime
@@ -632,7 +643,7 @@ AC_RUN_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>
 	if (ret != 5) {
 		return 1;
 	}
-	if (buff[0] != '+' && buff[0] != '-') {
+	if ((buff[0] != '+') && (buff[0] != '-')) {
 		return 1;
 	}
 	return 0;]])],
@@ -652,18 +663,18 @@ AC_RUN_IFELSE([AC_LANG_PROGRAM([[]],[[
 
 # OpenCOBOL Configuration
 
-if test "x$prefix" = "xNONE"
+if test "x${prefix}" = "xNONE"
 then
-  if test "x$includedir" = "x\${prefix}/include"
+  if test "x${includedir}" = "x\${prefix}/include"
   then
     COB_CFLAGS="-I${ac_default_prefix}/include"
   else
     COB_CFLAGS="-I${includedir}"
   fi
 else
-  if test "x$includedir" = "x\${prefix}/include"
+  if test "x${includedir}" = "x\${prefix}/include"
   then
-    if test "x$prefix" = "x/usr"
+    if test "x${prefix}" = "x/usr"
     then
       COB_CFLAGS=""
     else
@@ -674,58 +685,58 @@ else
   fi
 fi
 
-if test "x$CPPFLAGS" != "x"
+if test "x${CPPFLAGS}" != "x"
 then
-  COB_CFLAGS="$COB_CFLAGS $CPPFLAGS"
+  COB_CFLAGS="${COB_CFLAGS} ${CPPFLAGS}"
 fi
 
-COB_LIBS="-L$libdir -lcob ${LIBCOB_LIBS}"
+COB_LIBS="-L${libdir} -lcob ${LIBCOB_LIBS}"
 COB_LDFLAGS=""
-if test "x$LDFLAGS" != "x"
+if test "x${LDFLAGS}" != "x"
 then
-  COB_LIBS="$LDFLAGS $COB_LIBS"
-  COB_LDFLAGS="$LDFLAGS"
+  COB_LIBS="${LDFLAGS} ${COB_LIBS}"
+  COB_LDFLAGS="${LDFLAGS}"
 fi
 
-COB_CONFIG_DIR="$datadir/$PACKAGE_TARNAME/config"
-COB_COPY_DIR="$datadir/$PACKAGE_TARNAME/copy"
-COB_LIBRARY_PATH="$libdir/$PACKAGE_TARNAME"
-COB_MODULE_EXT=`echo "$shlibext" | sed -e 's/dll\.a/dll/'`
-LIBS="$save_libs"
-COB_EXPORT_DYN="`eval echo $export_dynamic_flag_spec`"
-COB_PIC_FLAGS=`echo "$lt_prog_compiler_pic" | sed -e 's/^ //'`
+COB_CONFIG_DIR="${datadir}/${PACKAGE_TARNAME}/config"
+COB_COPY_DIR="${datadir}/${PACKAGE_TARNAME}/copy"
+COB_LIBRARY_PATH="${libdir}/${PACKAGE_TARNAME}"
+COB_MODULE_EXT=`echo "${shlibext}" | sed -e 's/dll\.a/dll/'`
+LIBS="${save_libs}"
+COB_EXPORT_DYN="`eval echo ${export_dynamic_flag_spec}`"
+COB_PIC_FLAGS=`echo "${lt_prog_compiler_pic}" | sed -e 's/^ //'`
 COB_SHARED_OPT="-shared"
-COB_EXEEXT="$EXEEXT"
+COB_EXEEXT="${EXEEXT}"
 COB_EXTRA_FLAGS=""
 
-if test "$GEN_DEBUG_OPT" = "no"
+if test "x${GEN_DEBUG_OPT}" = "no"
 then
-        CFLAGS=`echo "$CFLAGS" | sed -e 's/^-g//' -e 's/-g$//' -e 's/-g / /'`
+        CFLAGS=`echo "${CFLAGS}" | sed -e 's/^-g//' -e 's/-g$//' -e 's/-g / /'`
 fi
 
 # Include CFLAGS in COB_CFLAGS without optimization/debug options
 
-cob_temp_flags=`echo "$CFLAGS" | sed -e 's/^@<:@+-@:>@O@<:@0-9s@:>@//' -e 's/@<:@+-@:>@O@<:@0-9s@:>@$//' -e 's/@<:@+-@:>@O@<:@0-9s@:>@ / /'`
-cob_temp_flags=`echo "$cob_temp_flags" | sed -e 's/^-O//' -e 's/-O$//' -e 's/-O / /' -e 's/^-g//' -e 's/-g$//' -e 's/-g / /'`
+cob_temp_flags=`echo "${CFLAGS}" | sed -e 's/^@<:@+-@:>@O@<:@0-9s@:>@//' -e 's/@<:@+-@:>@O@<:@0-9s@:>@$//' -e 's/@<:@+-@:>@O@<:@0-9s@:>@ / /'`
+cob_temp_flags=`echo "${cob_temp_flags}" | sed -e 's/^-O//' -e 's/-O$//' -e 's/-O / /' -e 's/^-g//' -e 's/-g$//' -e 's/-g / /'`
 
-COB_CFLAGS="$COB_CFLAGS $cob_temp_flags"
+COB_CFLAGS="${COB_CFLAGS} ${cob_temp_flags}"
 
-if test "`basename $COB_CC`" = "gcc"
+if test "`basename ${COB_CC}`" = "gcc"
 then
 	cob_temp_flags="`${COB_CC} ${srcdir}/cpucheck.c -o cpucheck 1>/dev/null 2>&1 && ./cpucheck 2>/dev/null`"
 	rm -f cpucheck${EXEEXT}
-	if test "x$cob_temp_flags" != "x"
+	if test "x${cob_temp_flags}" != "x"
 	then
-		CFLAGS="$CFLAGS $cob_temp_flags -finline-functions"
-		COB_EXTRA_FLAGS="$cob_temp_flags"
+		CFLAGS="${CFLAGS} ${cob_temp_flags} -finline-functions"
+		COB_EXTRA_FLAGS="${cob_temp_flags}"
 	else
-		CFLAGS="$CFLAGS -finline-functions"
+		CFLAGS="${CFLAGS} -finline-functions"
 	fi
 fi
 
 # Check gcc 4 option
-MYOLDCFLAGS="$CFLAGS"
-CFLAGS="$CFLAGS -Wno-pointer-sign"
+MYOLDCFLAGS="${CFLAGS}"
+CFLAGS="${CFLAGS} -Wno-pointer-sign"
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]],[[int testint;]])],
 	[AC_DEFINE([HAVE_PSIGN_OPT],[1])],
 	[])
@@ -745,26 +756,26 @@ AH_VERBATIM([_XOPEN_SOURCE_EXTENDED],
 # undef _XOPEN_SOURCE_EXTENDED
 #endif])dnl
 
-COB_FIX_LIB="$COB_EXPORT_DYN"
-case $host_os in
+COB_FIX_LIB="${COB_EXPORT_DYN}"
+case ${host_os} in
   mingw*)
-	if test "$prefix" = "NONE"
+	if test "x${prefix}" = "xNONE"
 	then
-	COB_CONFIG_DIR="`cd /usr && pwd -W`/local/share/$PACKAGE_TARNAME/config"
-	COB_COPY_DIR="`cd /usr && pwd -W`/local/share/$PACKAGE_TARNAME/copy"
+	COB_CONFIG_DIR="`cd /usr && pwd -W`/local/share/${PACKAGE_TARNAME}/config"
+	COB_COPY_DIR="`cd /usr && pwd -W`/local/share/${PACKAGE_TARNAME}/copy"
 	fi
 	COB_EXPORT_DYN="-Wl,--export-all-symbols -Wl,--enable-auto-import"
-	COB_FIX_LIB="$COB_EXPORT_DYN"
+	COB_FIX_LIB="${COB_EXPORT_DYN}"
 	;;
   cygwin*)
 	COB_EXPORT_DYN="-Wl,--export-all-symbols -Wl,--enable-auto-import"
-	COB_FIX_LIB="$COB_EXPORT_DYN"
+	COB_FIX_LIB="${COB_EXPORT_DYN}"
 	;;
   darwin* | rhapsody*)
 	COB_SHARED_OPT="-bundle -flat_namespace -undefined suppress"
 	;;
   hpux*)
-	if test "`basename $CC`" != "gcc"
+	if test "`basename ${CC}`" != "gcc"
 	then
 		COB_SHARED_OPT="-b"
 		AC_DEFINE([_XOPEN_SOURCE_EXTENDED],[1])
@@ -773,30 +784,30 @@ case $host_os in
 		${CC} ${CFLAGS} +Olit=all -o hptest hptest.c > hptest.out 2>&1
 		if test $? -ne 0 -o -s hptest.out
 		then
-			CFLAGS="$CFLAGS +ESlit"
-			COB_CFLAGS="$COB_CFLAGS +ESlit -w"
+			CFLAGS="${CFLAGS} +ESlit"
+			COB_CFLAGS="${COB_CFLAGS} +ESlit -w"
 		else
-			CFLAGS="$CFLAGS +Olit=all"
-			COB_CFLAGS="$COB_CFLAGS +Olit=all -w"
+			CFLAGS="${CFLAGS} +Olit=all"
+			COB_CFLAGS="${COB_CFLAGS} +Olit=all -w"
 		fi
 		rm -f hptest*
 	fi
 	;;
   aix*)
 	COB_EXPORT_DYN="-Wl,-bexpfull"
-	if test "`basename $CC`" != "gcc"
+	if test "`basename ${CC}`" != "gcc"
 	then
-		CFLAGS="$CFLAGS -O2 -Q -qro -qroconst"
+		CFLAGS="${CFLAGS} -O2 -Q -qro -qroconst"
 		COB_SHARED_OPT="-G"
 		COB_FIX_LIB=""
-		# COB_FIX_LIB="-Wc,-G $COB_EXPORT_DYN"
-		# COB_CFLAGS="$COB_CFLAGS -qchars=signed"
+		# COB_FIX_LIB="-Wc,-G ${COB_EXPORT_DYN}"
+		# COB_CFLAGS="${COB_CFLAGS} -qchars=signed"
 	else
-		COB_FIX_LIB="$COB_EXPORT_DYN"
+		COB_FIX_LIB="${COB_EXPORT_DYN}"
 	fi
 	;;
   solaris*)
-	if test "`basename $CC`" != "gcc"
+	if test "`basename ${CC}`" != "gcc"
 	then
 		COB_SHARED_OPT="-G"
 	fi
@@ -861,7 +872,7 @@ echo "  COB_CFLAGS           ${COB_CFLAGS}"
 echo "  COB_EXTRA_FLAGS      ${COB_EXTRA_FLAGS}"
 echo "  LDFLAGS              ${LDFLAGS}"
 echo "  COB_LDFLAGS          ${COB_LDFLAGS}"
-if test "x$COBC_LIBS" != "x"
+if test "x${COBC_LIBS}" != "x"
 then
   echo "  COBC_LIBS            ${COBC_LIBS}"
 fi
@@ -873,7 +884,7 @@ echo "  COB_MODULE_EXT       ${COB_MODULE_EXT}"
 echo "  COB_SHARED_OPT       ${COB_SHARED_OPT}"
 echo "  COB_PIC_FLAGS        ${COB_PIC_FLAGS}"
 echo "  COB_EXPORT_DYN       ${COB_EXPORT_DYN}"
-if test "x$striplib" != "x"
+if test "x${striplib}" != "x"
 then
   echo "  COB_STRIP_CMD        ${striplib}"
 fi
@@ -885,20 +896,20 @@ else
 fi
 echo ""
 echo "  Use gettext for international messages:      ${USE_NLS}"
-if test "$with_seqra_extfh" = "yes"
+if test "x${with_seqra_extfh}" = "xyes"
 then
   echo "  Use external SEQ/RAN file handler            yes"
 fi
-if test "$with_index_extfh" = "yes"
+if test "x${with_index_extfh}" = "xyes"
 then
   echo "  Use external ISAM file handler               yes"
-elif test "$with_cisam" = "yes"
+elif test "x${with_cisam}" = "xyes"
 then
   echo "  Use CISAM for file I/O                       yes"
-elif test "$with_disam" = "yes"
+elif test "x${with_disam}" = "xyes"
 then
   echo "  Use DISAM for file I/O                       yes"
-elif test "$with_vbisam" = "yes"
+elif test "x${with_vbisam}" = "xyes"
 then
   echo "  Use VBISAM for file I/O                      yes"
 else
