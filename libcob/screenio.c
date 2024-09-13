@@ -316,7 +316,7 @@ cob_check_pos_status (int fret)
 		if (COB_FIELD_IS_NUMERIC (cob_current_module->crt_status)) {
 			cob_set_int (cob_current_module->crt_status, fret);
 		} else {
-			sprintf(datbuf, "%4.4d", fret);
+			snprintf(datbuf, sizeof(datbuf), "%4.4d", fret);
 			memcpy (cob_current_module->crt_status->data, datbuf, 4);
 		}
 	}
@@ -332,12 +332,12 @@ cob_check_pos_status (int fret)
 			if (f->size < 6) {
 				sline *= 100;
 				sline += scolumn;
-				sprintf(datbuf, "%4.4d", sline);
+				snprintf(datbuf, sizeof(datbuf), "%4.4d", sline);
 				memcpy (f->data, datbuf, 4);
 			} else {
 				sline *= 1000;
 				sline += scolumn;
-				sprintf(datbuf, "%6.6d", sline);
+				snprintf(datbuf, sizeof(datbuf), "%6.6d", sline);
 				memcpy (f->data, datbuf, 6);
 			}
 		}

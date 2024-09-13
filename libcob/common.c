@@ -815,8 +815,9 @@ cob_runtime_error (const char *fmt, ...)
 		if (runtime_err_str) {
 			p = runtime_err_str;
 			if (cob_source_file) {
-				sprintf (runtime_err_str, "%s:%d: ",
-					 cob_source_file, cob_source_line);
+				snprintf(runtime_err_str, COB_ERRBUF_SIZE,
+					 "%s:%d: ", cob_source_file,
+					 cob_source_line);
 				p = runtime_err_str + strlen (runtime_err_str);
 			}
 			va_start (ap, fmt);
@@ -1231,7 +1232,8 @@ cob_check_numeric (cob_field *f, const char *name)
 			if (isprint (data[i])) {
 				*p++ = data[i];
 			} else {
-				p += sprintf (p, "\\%03o", data[i]);
+				p += snprintf(p, COB_SMALL_BUFF, "\\%03o",
+    				              data[i]);
 			}
 		}
 		*p = '\0';
@@ -1363,7 +1365,7 @@ cob_accept_day_of_week (cob_field *f)
 
 	t = time (NULL);
 #if defined(_MSC_VER)
-	sprintf(s, "%d", localtime(&t)->tm_wday + 1);
+	snprintf(s, sizeof(s), "%d", localtime(&t)->tm_wday + 1);
 #else
 	strftime (s, 2, "%u", localtime (&t));
 #endif
@@ -1386,7 +1388,7 @@ cob_accept_time (cob_field *f)
 
 #ifdef _WIN32
 	GetLocalTime (&syst);
-	sprintf (s, "%2.2d%2.2d%2.2d%2.2d", syst.wHour, syst.wMinute,
+	snprintf(s, sizeof(s), "%2.2d%2.2d%2.2d%2.2d", syst.wHour, syst.wMinute,
 		syst.wSecond, syst.wMilliseconds / 10);
 #else
 #if defined(HAVE_SYS_TIME_H) && defined(HAVE_GETTIMEOFDAY)
@@ -1397,7 +1399,7 @@ cob_accept_time (cob_field *f)
 #endif
 	strftime (s, 9, "%H%M%S00", localtime (&t));
 #if defined(HAVE_SYS_TIME_H) && defined(HAVE_GETTIMEOFDAY)
-	sprintf(buff2, "%2.2ld", tmv.tv_usec / 10000);
+	snprintf(buff2, sizeof(buff2), "%2.2ld", tmv.tv_usec / 10000);
 	memcpy (&s[6], buff2, 2);
 #endif
 #endif
@@ -1527,7 +1529,7 @@ cob_display_env_value (cob_field *f)
 	cob_field_to_string (f, env2);
 	len = strlen (cob_local_env) + strlen (env2) + 3;
 	p = cob_malloc (len);
-	sprintf (p, "%s=%s", cob_local_env, env2);
+	snprintf(p, len, "%s=%s", cob_local_env, env2);
 	if (putenv (p) != 0) {
 		cob_set_exception (COB_EC_IMP_DISPLAY);
 	}

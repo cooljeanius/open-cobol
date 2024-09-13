@@ -25,6 +25,13 @@
 #include	<libcob.h>
 #include	<tarstamp.h>
 
+#if defined(__GNUC__) && (__GNUC__ > 1)
+# ifdef sprintf
+#  undef sprintf
+# endif /* sprintf */
+# pragma GCC poison sprintf
+#endif /* GCC */
+
 static void
 print_version (void)
 {
@@ -39,9 +46,10 @@ print_version (void)
 	year = 0;
 	sscanf (__DATE__, "%s %d %d", month, &day, &year);
 	if (day && year) {
-		sprintf (buff, "%s %2.2d %4.4d %s", month, day, year, __TIME__);
+		snprintf(buff, sizeof(buff), "%s %2.2d %4.4d %s", month, day,
+         		 year, __TIME__);
 	} else {
-		sprintf (buff, "%s %s", __DATE__, __TIME__);
+		snprintf(buff, sizeof(buff), "%s %s", __DATE__, __TIME__);
 	}
 	printf ("cobcrun (%s) %s.%d\n",
 		PACKAGE_NAME, PACKAGE_VERSION, PATCH_LEVEL);

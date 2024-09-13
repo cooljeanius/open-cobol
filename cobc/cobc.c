@@ -1042,8 +1042,9 @@ process_filename (const char *filename)
 	} else if (output_name && cb_compile_level == CB_LEVEL_PREPROCESS) {
 		fn->preprocess = strdup (output_name);
 	} else if (save_temps) {
-		fn->preprocess = cobc_malloc (strlen (basename) + 5);
-		sprintf (fn->preprocess, "%s.i", basename);
+		size_t len = (strlen(basename) + 5UL);
+		fn->preprocess = cobc_malloc(len);
+		snprintf(fn->preprocess, len, "%s.i", basename);
 	} else {
 		fn->preprocess = cobc_temp_name (".cob");
 	}
@@ -1055,16 +1056,18 @@ process_filename (const char *filename)
 		fn->translate = strdup (output_name);
 	} else if (save_csrc || save_temps ||
 		   cb_compile_level == CB_LEVEL_TRANSLATE) {
-		fn->translate = cobc_malloc (strlen (basename) + 5);
-		sprintf (fn->translate, "%s.c", basename);
+     		size_t len = (strlen(basename) + 5UL);
+		fn->translate = cobc_malloc(len);
+		snprintf(fn->translate, len, "%s.c", basename);
 	} else {
 		fn->translate = cobc_temp_name (".c");
 	}
 
 	/* Set storage filename */
 	if (fn->need_translate) {
-		fn->trstorage = cobc_malloc (strlen (fn->translate) + 5);
-		sprintf (fn->trstorage, "%s.h", fn->translate);
+		size_t len = (strlen(fn->translate) + 5UL);
+		fn->trstorage = cobc_malloc(len);
+		snprintf(fn->trstorage, len, "%s.h", fn->translate);
 	}
 
 	/* Set object filename */
@@ -1073,16 +1076,18 @@ process_filename (const char *filename)
 	} else if (output_name && cb_compile_level == CB_LEVEL_ASSEMBLE) {
 		fn->object = strdup (output_name);
 	} else if (save_temps || cb_compile_level == CB_LEVEL_ASSEMBLE) {
-		fn->object = cobc_malloc (strlen (basename) + 5);
+		size_t len = (strlen(basename) + 5UL);
+		fn->object = cobc_malloc(len);
 #ifdef	_MSC_VER
-		sprintf (fn->object, "%s.obj", basename);
+		snprintf(fn->object, len, "%s.obj", basename);
 #else
-		sprintf (fn->object, "%s.o", basename);
+		snprintf(fn->object, len, "%s.o", basename);
 #endif
 	} else {
 #ifdef	_MSC_VER
-		fn->object = cobc_malloc (strlen (basename) + 5);
-		sprintf (fn->object, "%s.obj", basename);
+		size_t len = (strlen(basename) + 5UL);
+		fn->object = cobc_malloc(len);
+		snprintf(fn->object, len, "%s.obj", basename);
 #else
 		fn->object = cobc_temp_name (".o");
 #endif
@@ -1348,12 +1353,15 @@ process_translate (struct filename *fn)
 	/* set up local storage files */
 	ret = 1;
 	for (q = p; q; q = q->next_program, ret++) {
-		lf = cobc_malloc (sizeof(struct local_filename));
-		lf->local_name = cobc_malloc (strlen (fn->translate) + 9);
+		size_t len;
+		lf = cobc_malloc(sizeof(struct local_filename));
+  		len = (strlen(fn->translate) + 9UL);
+		lf->local_name = cobc_malloc(len);
 		if (q == p && !q->next_program) {
-			sprintf (lf->local_name, "%s.l.h", fn->translate);
+			snprintf(lf->local_name, len, "%s.l.h", fn->translate);
 		} else {
-			sprintf (lf->local_name, "%s.l%d.h", fn->translate, ret);
+			snprintf(lf->local_name, len, "%s.l%d.h", fn->translate,
+      			         ret);
 		}
 		lf->local_fp = fopen (lf->local_name, "w");
 		if (!lf->local_fp) {
