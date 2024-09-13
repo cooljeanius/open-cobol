@@ -9,3 +9,6 @@ cobcrun_SOURCES = cobcrun.c
 AM_LDFLAGS = $(COB_EXPORT_DYN)
 cobcrun_CFLAGS = $(AM_CFLAGS) -I$(top_srcdir)
 cobcrun_LDADD = $(top_builddir)/libcob/libcob.la
+
+distclean-local:
+	-rm -rf .deps || rmdir .deps

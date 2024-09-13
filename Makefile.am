@@ -13,6 +13,7 @@ SUBDIRS = lib libcob cobc bin config copy po texi tests
 ACLOCAL_AMFLAGS = -I m4 --install
 BUILT_SOURCES = defaults.h
 DISTCLEANFILES = $(BUILT_SOURCES) cpucheck *~ m4/*~ po/*~
+MAINTAINERCLEANFILES = autoscan.log
 EXTRA_DIST = cpucheck.c COPYING.DOC
 
 distclean-local:

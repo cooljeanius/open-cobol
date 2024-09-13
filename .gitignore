@@ -10,10 +10,13 @@ Makefile
 *.libs/*
 */*.libs/*
 cob-config
+confdefs.h
 config.h
+conftest*
 *.status
 defaults.h
 *.lo
 stamp-h*
 *.la
 open-cobol-1.1/*
+tmpwrk*/*

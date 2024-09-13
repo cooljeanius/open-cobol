@@ -21,3 +21,6 @@ CLEANFILES = parser.output
 
 %.c: %.y
 	bison -o $@ $<
+
+distclean-local:
+	-rm -rf .deps || rmdir .deps

@@ -18,3 +18,6 @@ pkgincludedir = $(includedir)/libcob
 pkginclude_HEADERS = byteswap.h common.h move.h numeric.h exception.def \
 	termio.h fileio.h screenio.h strings.h call.h intrinsic.h \
 	codegen.h system.def
+
+distclean-local:
+	-rm -rf .deps || rmdir .deps
