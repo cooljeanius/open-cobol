@@ -4630,7 +4630,7 @@ free_statement:
   FREE				{ BEGIN_STATEMENT ("FREE", 0); }
   target_x_list
   {
-	cb_emit_free ($3)
+	cb_emit_free ($3);
   }
 ;
 
