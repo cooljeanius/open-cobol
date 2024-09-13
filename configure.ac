@@ -510,6 +510,12 @@ then
                     db4.1/db_185.h db4.2/db_185.h db4.3/db_185.h db44/db.h \
                     db44/db_cxx.h db4.4/db_185.h db4.5/db_185.h \
                     db4.5/db_185.h db46/db.h db46/db_cxx.h db4.6/db_185.h])
+		if test "${USE_DB}" != "yes"; then
+		AC_CHECK_LIB([db-6.2],[__db_open],
+		[USE_DB="yes" LIBCOB_LIBS="${LIBCOB_LIBS} -ldb-6.2"],
+		  [AC_CHECK_LIB([db-6.2],[dbopen],
+		    [USE_DB="yes" LIBCOB_LIBS="${LIBCOB_LIBS} -ldb-6.2"],[])])
+		fi ## 6.2
 		if test "${USE_DB}" != "yes"
 		then
 		AC_CHECK_LIB([db-6.0],[__db_open],

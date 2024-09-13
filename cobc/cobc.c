@@ -1,4 +1,4 @@
-/*
+/* cobc.c
  * Copyright (C) 2001-2009 Keisuke Nishida
  * Copyright (C) 2007-2009 Roger While
  *
@@ -408,8 +408,9 @@ cobc_check_action (const char *name)
 		if (!save_temps) {
 			unlink (name);
 		} else if (save_temps_dir) {
-			memset (buff, 0, sizeof(buff));
-			sprintf (buff, "%s/%s", save_temps_dir, name);
+			memset(buff, 0, sizeof(buff));
+			snprintf(buff, sizeof(buff), "%s/%s", save_temps_dir,
+     			         name);
 			(void)rename (name, buff);
 		}
 	}
@@ -446,11 +447,13 @@ cobc_clean_up (int status)
 				memset (buff, 0, sizeof(buff));
 				for (i = 0; i < 30; i++) {
 					if (i) {
-						sprintf (buff, "%s.l%d.h",
-							fn->translate, i);
+						snprintf(buff, sizeof(buff),
+							 "%s.l%d.h",
+							 fn->translate, i);
 					} else {
-						sprintf (buff, "%s.l.h",
-							fn->translate);
+						snprintf(buff, sizeof(buff),
+							 "%s.l.h",
+							 fn->translate);
 					}
 					unlink (buff);
 				}
@@ -969,8 +972,8 @@ cobc_temp_name (const char *ext)
 	DeleteFile (buff);
 	strcpy (buff + strlen (buff) - 4, ext);	/* replace ".tmp" by EXT */
 #else
-	sprintf (buff, "%s/cob%d_%d%s", cob_tmpdir, cob_process_id,
-		 cob_iteration, ext);
+	snprintf(buff, sizeof(buff), "%s/cob%d_%d%s", cob_tmpdir,
+	 	 cob_process_id, cob_iteration, ext);
 #endif
 	return strdup (buff);
 }
@@ -1389,14 +1392,14 @@ process_compile (struct filename *fn)
 #endif
 	}
 #ifdef _MSC_VER
-	sprintf (buff, gflag_set ? 
+	snprintf(buff, sizeof(buff), gflag_set ?
 		"%s /c %s %s /Od /MDd /Zi /FR /c /Fa%s /Fo%s %s" :
 		"%s /c %s %s /MD /c /Fa%s /Fo%s %s",
 			cob_cc, cob_cflags, cob_define_flags, name,
 			name, fn->translate);
 #else
-	sprintf (buff, "%s %s -S -o %s %s %s %s", cob_cc, gccpipe, name,
-			cob_cflags, cob_define_flags, fn->translate);
+	snprintf(buff, sizeof(buff), "%s %s -S -o %s %s %s %s", cob_cc,
+		 gccpipe, name, cob_cflags, cob_define_flags, fn->translate);
 #endif
 	return process (buff);
 }
@@ -1407,7 +1410,7 @@ process_assemble (struct filename *fn)
 	char buff[COB_MEDIUM_BUFF];
 
 #ifdef _MSC_VER
-	sprintf (buff, gflag_set ? 
+	snprintf(buff, sizeof(buff), gflag_set ?
 		"%s /c %s %s /Od /MDd /Zi /FR /Fo%s %s" :
 		"%s /c %s %s /MD /Fo%s %s",
 			cob_cc, cob_cflags, cob_define_flags,
@@ -1415,11 +1418,11 @@ process_assemble (struct filename *fn)
 #else
 	if (cb_compile_level == CB_LEVEL_MODULE ||
 	    cb_compile_level == CB_LEVEL_LIBRARY) {
-		sprintf (buff, "%s %s -c %s %s %s -o %s %s",
+		snprintf(buff, sizeof(buff), "%s %s -c %s %s %s -o %s %s",
 			 cob_cc, gccpipe, cob_cflags, cob_define_flags,
 			 COB_PIC_FLAGS, fn->object, fn->translate);
 	} else {
-		sprintf (buff, "%s %s -c %s %s -o %s %s",
+		snprintf(buff, sizeof(buff), "%s %s -c %s %s -o %s %s",
 			 cob_cc, gccpipe, cob_cflags, cob_define_flags,
 			 fn->object, fn->translate);
 	}
@@ -1450,7 +1453,7 @@ process_module_direct (struct filename *fn)
 #endif
 	}
 #ifdef _MSC_VER
-	sprintf (buff, gflag_set ? 
+	snprintf(buff, sizeof(buff), gflag_set ?
 		"%s %s %s /Od /MDd /LDd /Zi /FR /Fe%s /Fo%s %s %s %s" :
 		"%s %s %s /MD /LD /Fe%s /Fo%s %s %s %s",
 			cob_cc, cob_cflags, cob_define_flags, name, name,
@@ -1459,19 +1462,19 @@ process_module_direct (struct filename *fn)
 #if _MSC_VER >= 1400
 	/* Embedding manifest */
 	if (ret == 0) {
-		sprintf (buff, "mt /manifest %s.dll.manifest /outputresource:%s.dll;#2", name, name);
+		snprintf(buff, sizeof(buff), "mt /manifest %s.dll.manifest /outputresource:%s.dll;#2", name, name);
 		ret = process (buff);
 	}
 #endif
 #else	/* _MSC_VER */
-	sprintf (buff, "%s %s %s %s %s %s %s %s -o %s %s %s",
+	snprintf(buff, sizeof(buff), "%s %s %s %s %s %s %s %s -o %s %s %s",
 		 cob_cc, gccpipe, cob_cflags, cob_define_flags, COB_SHARED_OPT,
 		 cob_ldflags, COB_PIC_FLAGS, COB_EXPORT_DYN, name,
 		 fn->translate, cob_libs);
 	ret = process (buff);
 #ifdef	COB_STRIP_CMD
 	if (strip_output && ret == 0) {
-		sprintf (buff, "%s %s", COB_STRIP_CMD, name);
+		snprintf(buff, sizeof(buff), "%s %s", COB_STRIP_CMD, name);
 		ret = process (buff);
 	}
 #endif
@@ -1500,7 +1503,7 @@ process_module (struct filename *fn)
 		strcat (name, COB_MODULE_EXT);
 	}
 #ifdef _MSC_VER
-	sprintf (buff, gflag_set ? 
+	snprintf(buff, sizeof(buff), gflag_set ?
 		"%s /Od /MDd /LDd /Zi /FR /Fe%s %s %s %s" :
 		"%s /MD /LD /Fe%s %s %s %s",
 			cob_cc, name, cob_ldflags, fn->object, cob_libs);
@@ -1508,18 +1511,18 @@ process_module (struct filename *fn)
 #if _MSC_VER >= 1400
 	/* Embedding manifest */
 	if (ret == 0) {
-		sprintf (buff, "mt /manifest %s.dll.manifest /outputresource:%s.dll;#2", name, name);
+		snprintf(buff, sizeof(buff), "mt /manifest %s.dll.manifest /outputresource:%s.dll;#2", name, name);
 		ret = process (buff);
 	}
 #endif
 #else	/* _MSC_VER */
-	sprintf (buff, "%s %s %s %s %s %s -o %s %s %s",
+	snprintf(buff, sizeof(buff), "%s %s %s %s %s %s -o %s %s %s",
 		 cob_cc, gccpipe, COB_SHARED_OPT, cob_ldflags, COB_PIC_FLAGS,
 		 COB_EXPORT_DYN, name, fn->object, cob_libs);
 	ret = process (buff);
 #ifdef	COB_STRIP_CMD
 	if (strip_output && ret == 0) {
-		sprintf (buff, "%s %s", COB_STRIP_CMD, name);
+		snprintf(buff, sizeof(buff), "%s %s", COB_STRIP_CMD, name);
 		ret = process (buff);
 	}
 #endif
@@ -1580,7 +1583,7 @@ process_library (struct filename *l)
 	}
 
 #ifdef _MSC_VER
-	sprintf (buff, gflag_set ? 
+	snprintf(buff, sizeof(buff), gflag_set ?
 		"%s /Od /MDd /LDd /Zi /FR /Fe%s %s %s %s" :
 		"%s /MD /LD /Fe%s %s %s %s",
 			cob_cc, name, cob_ldflags, objsptr, cob_libs);
@@ -1588,7 +1591,7 @@ process_library (struct filename *l)
 #if _MSC_VER >= 1400
 	/* Embedding manifest */
 	if (ret == 0) {
-		sprintf (buff, "mt /manifest %s.dll.manifest /outputresource:%s.dll;#2", name, name);
+		snprintf(buff, sizeof(buff), "mt /manifest %s.dll.manifest /outputresource:%s.dll;#2", name, name);
 		ret = process (buff);
 	}
 #endif
@@ -1599,7 +1602,7 @@ process_library (struct filename *l)
 	ret = process (buffptr);
 #ifdef	COB_STRIP_CMD
 	if (strip_output && ret == 0) {
-		sprintf (buff, "%s %s", COB_STRIP_CMD, name);
+		snprintf(buff, sizeof(buff), "%s %s", COB_STRIP_CMD, name);
 		ret = process (buff);
 	}
 #endif
@@ -1648,7 +1651,7 @@ process_link (struct filename *l)
 		buffptr = buff;
 	}
 #ifdef _MSC_VER
-	sprintf (buff, gflag_set ? 
+	snprintf(buff, sizeof(buff), gflag_set ?
 		"%s /Od /MDd /Zi /FR /Fe%s %s %s %s" :
 		"%s /MD /Fe%s %s %s %s",
 			cob_cc, name, cob_ldflags, objsptr, cob_libs);
@@ -1656,7 +1659,7 @@ process_link (struct filename *l)
 #if _MSC_VER >= 1400
 	/* Embedding manifest */
 	if (ret == 0) {
-		sprintf (buff, "mt /manifest %s.exe.manifest /outputresource:%s.exe;#2", name, name);
+		snprintf(buff, sizeof(buff), "mt /manifest %s.exe.manifest /outputresource:%s.exe;#2", name, name);
 		ret = process (buff);
 	}
 #endif
@@ -1668,13 +1671,13 @@ process_link (struct filename *l)
 	ret = process (buffptr);
 #ifdef	__hpux
 	if (ret == 0) {
-		sprintf (buff, "chatr -s +s enable %s%s 1>/dev/null 2>&1", name, COB_EXEEXT);
+		snprintf(buff, sizeof(buff), "chatr -s +s enable %s%s 1>/dev/null 2>&1", name, COB_EXEEXT);
 		process (buff);
 	}
 #endif
 #ifdef	COB_STRIP_CMD
 	if (strip_output && ret == 0) {
-		sprintf (buff, "%s %s%s", COB_STRIP_CMD, name, COB_EXEEXT);
+		snprintf(buff, sizeof(buff), "%s %s%s", COB_STRIP_CMD, name, COB_EXEEXT);
 		ret = process (buff);
 	}
 #endif
@@ -1732,9 +1735,9 @@ main (int argc, char *argv[])
 	year = 0;
 	sscanf (__DATE__, "%s %d %d", month, &day, &year);
 	if (day && year) {
-		sprintf (buff, "%s %2.2d %4.4d %s", month, day, year, __TIME__);
+		snprintf(buff, sizeof(buff), "%s %2.2d %4.4d %s", month, day, year, __TIME__);
 	} else {
-		sprintf (buff, "%s %s", __DATE__, __TIME__);
+		snprintf(buff, sizeof(buff), "%s %s", __DATE__, __TIME__);
 	}
 	cb_oc_build_stamp = cobc_malloc (strlen (buff) + 1);
 	strcpy (cb_oc_build_stamp, buff);
@@ -1745,7 +1748,7 @@ main (int argc, char *argv[])
 		cob_tmpdir = p;
 	} else if ((p = getenv ("TMP")) != NULL) {
 		cob_tmpdir = p;
-		sprintf (buff, "TMPDIR=%s", p);
+		snprintf(buff, sizeof(buff), "TMPDIR=%s", p);
 		p = strdup (buff);
 		putenv (p);
 	} else {
