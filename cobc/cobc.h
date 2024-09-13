@@ -63,9 +63,9 @@ extern struct cb_exception {
 #include "warning.def"
 #undef	CB_WARNDEF
 
-#if defined(__GNUC__) && (__GNUC__ > 1) && !defined(sprintf)
+#if defined(__GNUC__) && (__GNUC__ > 1) && 0
 # pragma GCC poison sprintf
-#endif /* GCC && !sprintf */
+#endif /* GCC && 0 */
 
 struct cb_text_list {
 	const char		*text;

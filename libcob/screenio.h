@@ -62,9 +62,9 @@
 #define COB_SCREEN_TYPE_VALUE		2
 #define COB_SCREEN_TYPE_ATTRIBUTE	3
 
-#if defined(__GNUC__) && (__GNUC__ > 1) && !defined(sprintf)
+#if defined(__GNUC__) && (__GNUC__ > 1) && 0
 # pragma GCC poison sprintf
-#endif /* GCC && !sprintf */
+#endif /* GCC && 0 */
 
 typedef struct __cob_screen cob_screen;
 
