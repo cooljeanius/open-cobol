@@ -609,7 +609,7 @@ cob_malloc (const size_t size)
 
 	mptr = calloc (1, size);
 	if (unlikely(!mptr)) {
-		cob_runtime_error ("Cannot acquire %d bytes of memory - Aborting", size);
+		cob_runtime_error("Cannot acquire %lu bytes of memory - Aborting", size);
 		cob_stop_run (1);
 	}
 	return mptr;
@@ -1399,7 +1399,7 @@ cob_accept_time (cob_field *f)
 #endif
 	strftime (s, 9, "%H%M%S00", localtime (&t));
 #if defined(HAVE_SYS_TIME_H) && defined(HAVE_GETTIMEOFDAY)
-	snprintf(buff2, sizeof(buff2), "%2.2ld", tmv.tv_usec / 10000);
+	snprintf(buff2, sizeof(buff2), "%2.2ld", tmv.tv_usec / 10000L);
 	memcpy (&s[6], buff2, 2);
 #endif
 #endif
